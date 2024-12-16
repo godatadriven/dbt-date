@@ -1,3 +1,5 @@
+## Note: This package is no longer actively supported. 
+
 <p align="center">
 <a href="https://circleci.com/gh/calogica/dbt-date/tree/main">
 <img alt="CircleCI" src="https://img.shields.io/circleci/build/github/calogica/dbt-date/main?style=plastic"/>
@@ -7,27 +9,6 @@
 # dbt-date
 
 `dbt-date` is an extension package for [**dbt**](https://github.com/dbt-labs/dbt) to handle common date logic and calendar functionality.
-
-## Featured Sponsors ❤️
-
-Development of `dbt-date` (and `dbt-expectations`) is funded by our amazing [sponsors](https://github.com/sponsors/calogica), including our **featured** sponsors:
-
-<table width="80%">
-<tr>
-<td width="40%" valign="top" align="center">
-<p><a href="https://datacoves.com/product" target="_blank">datacoves.com</a></p>
-<p>
-<a href="https://datacoves.com/product" target="_blank">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/datacoves/dbt-coves/blob/main/images/datacoves-dark.png">
-  <img alt="Datacoves" src="https://github.com/datacoves/dbt-coves/blob/main/images/datacoves-light.png" width="150">
-</picture>
-</a>
-</p>
-</td>
-
-</tr>
-</table>
 
 ## Install
 
