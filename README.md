@@ -1,14 +1,27 @@
-## Note: This package is no longer actively supported. 
-
-<p align="center">
-<a href="https://circleci.com/gh/calogica/dbt-date/tree/main">
-<img alt="CircleCI" src="https://img.shields.io/circleci/build/github/calogica/dbt-date/main?style=plastic"/>
-</a>
-<img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-ff69b4?style=plastic"/>
+<div align="center">
+  <a>
+	<img src="https://img.shields.io/github/v/tag/godatadriven/dbt-date?logo=github">
+  </a>
+  <a>
+	<img src="https://img.shields.io/badge/License-MIT-yellow.svg">
+  </a>
+  <a>
+	<img src="https://img.shields.io/github/last-commit/godatadriven/dbt-date/main">
+  </a>
+</div>
 
 # dbt-date
 
 `dbt-date` is an extension package for [**dbt**](https://github.com/dbt-labs/dbt) to handle common date logic and calendar functionality.
+
+## Maintainers
+Development of `dbt-date` is supported by [Xebia Data](https://xebia.com/digital-transformation/data-and-ai/) (formerly known as GoDataDriven):
+
+<div class="row">
+  <div class="column" align="center">
+    <img src="./images/xebia-logo-large-transparent.png" href="https://xebia.com/digital-transformation/data-and-ai/" media="(prefers-color-scheme: dark)" alt="Xebia logo" title="Xebia" style="width:40%; padding: 0px 10px 0px 0px">
+  </div>
+</div>
 
 ## Install
 
@@ -16,9 +29,9 @@ Include in `packages.yml`
 
 ```yaml
 packages:
-  - package: calogica/dbt_date
-    version: [">=0.10.0", "<0.11.0"]
-    # <see https://github.com/calogica/dbt-date/releases/latest> for the latest version tag
+  - package: godatadriven/dbt_date
+    version: 0.10.1
+    # <see https://github.com/godatadriven/dbt-date/releases/latest> for the latest version tag
 ```
 
 This package supports:
