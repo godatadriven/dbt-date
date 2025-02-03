@@ -15,7 +15,7 @@ clean-targets: ["target", "dbt_modules", "dbt_packages"]
 
 dispatch:
   - macro_namespace: dbt_date
-    search_order: ['dbt_date_integration_tests', 'dbt_date']  # enable override
+    search_order: ["dbt_date_integration_tests", "dbt_date"] # enable override
 
 flags:
   partial_parse: True
@@ -25,8 +25,8 @@ flags:
       - TestsConfigDeprecation
 
 vars:
-    dbt_date_dispatch_list: ['dbt_date_integration_tests']
-    "dbt_date:time_zone": "America/Los_Angeles"
+  dbt_date_dispatch_list: ["dbt_date_integration_tests"]
+  "dbt_date:time_zone": "America/Los_Angeles"
 
 quoting:
   database: false

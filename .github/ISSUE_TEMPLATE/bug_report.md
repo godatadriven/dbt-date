@@ -2,9 +2,8 @@
 name: Bug report
 about: I think I've found a bug
 title: "[BUG]"
-labels: ''
-assignees: ''
-
+labels: ""
+assignees: ""
 ---
 
 ### Is this a new bug in dbt-date?
