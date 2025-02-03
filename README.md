@@ -14,7 +14,6 @@
 
 `dbt-date` is an extension package for [**dbt**](https://github.com/dbt-labs/dbt) to handle common date logic and calendar functionality.
 
-## Maintainers
 Development of `dbt-date` is supported by [Xebia Data](https://xebia.com/digital-transformation/data-and-ai/) (formerly known as GoDataDriven):
 
 <div class="row">
@@ -36,12 +35,12 @@ packages:
 
 This package supports:
 
-* Postgres
-* Snowflake
-* BigQuery
-* DuckDB
-* Spark
-* Trino
+- Postgres
+- Snowflake
+- BigQuery
+- DuckDB
+- Spark
+- Trino
 
 ## Variables
 
@@ -49,7 +48,7 @@ The following variables need to be defined in your `dbt_project.yml` file:
 
 ```yaml
 vars:
-    "dbt_date:time_zone": "America/Los_Angeles"
+  "dbt_date:time_zone": "America/Los_Angeles"
 ```
 
 You may specify [any valid timezone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) in place of `America/Los_Angeles`.
@@ -59,55 +58,55 @@ For example, use `America/New_York` for East Coast Time.
 
 ### Date Dimension
 
-* [get_base_dates](#get_base_datesstart_datenone-end_datenone-n_datepartsnone-datepartday)
-* [get_date_dimension](#get_date_dimensionstart_date-end_date)
+- [get_base_dates](#get_base_datesstart_datenone-end_datenone-n_datepartsnone-datepartday)
+- [get_date_dimension](#get_date_dimensionstart_date-end_date)
 
 ### Calendar Date
 
-* [convert_timezone](#convert_timezone-column-target_tznone-source_tznone)
-* [date_part](#date_partdatepart-date)
-* [day_name](#day_namedate-shorttrue)
-* [day_of_month](#day_of_monthdate)
-* [day_of_week](#day_of_weekdate-isoweektrue)
-* [day_of_year](#day_of_yeardate)
-* [from_unixtimestamp](#from_unixtimestampepochs-formatseconds)
-* [iso_week_end](#iso_week_enddatenone-tznone)
-* [iso_week_of_year](#iso_week_of_yeardatenone-tznone)
-* [iso_week_start](#iso_week_startdatenone-tznone)
-* [last_month_name](#last_month_nameshorttrue-tznone)
-* [last_month_number](#last_month_numbertznone)
-* [last_month](#last_monthtznone)
-* [last_week](#last_weektznone)
-* [month_name](#month_namedate-shorttrue-tznone)
-* [n_days_ago](#n_days_agon-datenone-tznone)
-* [n_days_away](#n_days_awayn-datenone-tznone)
-* [n_months_ago](#n_months_agon-tznone)
-* [n_months_away](#n_months_awayn-tznone)
-* [n_weeks_ago](#n_weeks_agon-tznone)
-* [n_weeks_away](#n_weeks_awayn-tznone)
-* [next_month_name](#next_month_nameshorttrue-tznone)
-* [next_month_number](#next_month_numbertznone)
-* [next_month](#next_monthtznone)
-* [next_week](#next_weektznone)
-* [now](#nowtznone)
-* [periods_since](#periods_sincedate_col-period_nameday-tznone)
-* [round_timestamp](#round_timestamptimestamp)
-* [to_unixtimestamp](#to_unixtimestamptimestamp)
-* [today](#todaytznone)
-* [tomorrow](#tomorrowdatenone-tznone)
-* [week_end](#week_enddatenone-tznone)
-* [week_of_year](#week_of_yeardatenone-tznone)
-* [week_start](#week_startdatenone-tznone)
-* [yesterday](#yesterdaydatenone-tznone)
+- [convert_timezone](#convert_timezone-column-target_tznone-source_tznone)
+- [date_part](#date_partdatepart-date)
+- [day_name](#day_namedate-shorttrue)
+- [day_of_month](#day_of_monthdate)
+- [day_of_week](#day_of_weekdate-isoweektrue)
+- [day_of_year](#day_of_yeardate)
+- [from_unixtimestamp](#from_unixtimestampepochs-formatseconds)
+- [iso_week_end](#iso_week_enddatenone-tznone)
+- [iso_week_of_year](#iso_week_of_yeardatenone-tznone)
+- [iso_week_start](#iso_week_startdatenone-tznone)
+- [last_month_name](#last_month_nameshorttrue-tznone)
+- [last_month_number](#last_month_numbertznone)
+- [last_month](#last_monthtznone)
+- [last_week](#last_weektznone)
+- [month_name](#month_namedate-shorttrue-tznone)
+- [n_days_ago](#n_days_agon-datenone-tznone)
+- [n_days_away](#n_days_awayn-datenone-tznone)
+- [n_months_ago](#n_months_agon-tznone)
+- [n_months_away](#n_months_awayn-tznone)
+- [n_weeks_ago](#n_weeks_agon-tznone)
+- [n_weeks_away](#n_weeks_awayn-tznone)
+- [next_month_name](#next_month_nameshorttrue-tznone)
+- [next_month_number](#next_month_numbertznone)
+- [next_month](#next_monthtznone)
+- [next_week](#next_weektznone)
+- [now](#nowtznone)
+- [periods_since](#periods_sincedate_col-period_nameday-tznone)
+- [round_timestamp](#round_timestamptimestamp)
+- [to_unixtimestamp](#to_unixtimestamptimestamp)
+- [today](#todaytznone)
+- [tomorrow](#tomorrowdatenone-tznone)
+- [week_end](#week_enddatenone-tznone)
+- [week_of_year](#week_of_yeardatenone-tznone)
+- [week_start](#week_startdatenone-tznone)
+- [yesterday](#yesterdaydatenone-tznone)
 
 ## Fiscal Date
 
-* [get_fiscal_periods](#get_fiscal_periodsdates-year_end_month-week_start_day-shift_year1)
+- [get_fiscal_periods](#get_fiscal_periodsdates-year_end_month-week_start_day-shift_year1)
 
 ## Utils
 
-* [date](#dateyear-month-day)
-* [datetime](#datetimeyear-month-day-hour0-minute0-second0-microsecond0-tznone)
+- [date](#dateyear-month-day)
+- [datetime](#datetimeyear-month-day-hour0-minute0-second0-microsecond0-tznone)
 
 ## Documentation
 
@@ -223,8 +222,8 @@ Usage:
 
 ### [day_of_week](macros/calendar_date/day_of_week.sql)(`date, isoweek=true`)
 
-Extracts day of the week *number* from a date, starting with **1**.
-By default, uses `isoweek=True`, i.e. assumes week starts on *Monday*.
+Extracts day of the week _number_ from a date, starting with **1**.
+By default, uses `isoweek=True`, i.e. assumes week starts on _Monday_.
 
 Usage:
 
@@ -232,13 +231,13 @@ Usage:
 {{ dbt_date.day_of_week("'2022-03-06'") }} as day_of_week_iso
 ```
 
-returns: **7** (Sunday is the *last* day of the ISO week)
+returns: **7** (Sunday is the _last_ day of the ISO week)
 
 ```sql
 {{ dbt_date.day_of_week("'2022-03-06'", isoweek=False) }} as day_of_week
 ```
 
-returns: **1** (Sunday is the *first* day of the non-ISO week)
+returns: **1** (Sunday is the _first_ day of the non-ISO week)
 
 ### [day_of_year](macros/calendar_date/day_of_year.sql)(`date`)
 
@@ -412,7 +411,7 @@ Extracts the name of the month from a date.
 
 ### [n_days_ago](macros/calendar_date/n_days_ago.sql)(`n, date=None, tz=None`)
 
-Gets date *n* days ago, based on local date.
+Gets date _n_ days ago, based on local date.
 
 Usage:
 
@@ -434,7 +433,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_days_away](macros/calendar_date/n_days_away.sql)(`n, date=None, tz=None`)
 
-Gets date *n* days away, based on local date.
+Gets date _n_ days away, based on local date.
 
 Usage:
 
@@ -456,7 +455,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_months_ago](macros/calendar_date/n_months_ago.sql)(`n, tz=None`)
 
-Gets date *n* months ago, based on local date.
+Gets date _n_ months ago, based on local date.
 
 Usage:
 
@@ -472,7 +471,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_months_away](macros/calendar_date/n_months_away.sql)(`n, tz=None`)
 
-Gets date *n* months away, based on local date.
+Gets date _n_ months away, based on local date.
 
 Usage:
 
@@ -488,7 +487,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_weeks_ago](macros/calendar_date/n_weeks_ago.sql)(`n, tz=None`)
 
-Gets date *n* weeks ago, based on local date.
+Gets date _n_ weeks ago, based on local date.
 
 Usage:
 
@@ -504,7 +503,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_weeks_away](macros/calendar_date/n_weeks_away.sql)(`n, tz=None`)
 
-Gets date *n* weeks away, based on local date.
+Gets date _n_ weeks away, based on local date.
 
 Usage:
 
@@ -813,6 +812,7 @@ or, optionally, you can override the default timezone:
 Reduces the boilerplate syntax required to produce a `date` object. This is not converted to a string to allow pythonic manipulation.
 
 Usage:
+
 ```sql
 {% set date_object = dbt_date.date(1997, 9, 29) %}
 ```
@@ -822,6 +822,7 @@ Usage:
 Reduces the boilerplate syntax required to produce a `datetime` object. This is not converted to a string to allow pythonic manipulation.
 
 Usage:
+
 ```sql
 {% set datetime_object = dbt_date.datetime(1997, 9, 29, 6, 14) %}
 ```

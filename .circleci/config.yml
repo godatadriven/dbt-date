@@ -1,9 +1,7 @@
 version: 2.1
 
 jobs:
-
   integration-tests-core:
-
     docker:
       - image: cimg/python:3.9.9
       - image: cimg/postgres:14.0
@@ -45,7 +43,7 @@ jobs:
           environment:
             POSTGRES_HOST: localhost
             POSTGRES_TEST_USER: postgres
-            POSTGRES_TEST_PASSWORD: ''
+            POSTGRES_TEST_PASSWORD: ""
             POSTGRES_TEST_PORT: 5432
             POSTGRES_TEST_DATABASE: circle_test
             POSTGRES_TEST_SCHEMA: dbt_date_integration_tests
@@ -84,7 +82,6 @@ jobs:
           path: ./logs
 
   integration-tests-spark-thrift:
-
     docker:
       - image: cimg/python:3.9.9
       - image: godatadriven/spark:3.1.1
@@ -133,9 +130,7 @@ jobs:
       - store_artifacts:
           path: ./logs
 
-
   integration-tests-trino:
-
     docker:
       - image: cimg/python:3.11
       - image: trinodb/trino:431
@@ -168,7 +163,6 @@ jobs:
           command: |
             . venv/bin/activate
             dbt build -t trino --project-dir $DBT_PROJECT_DIR
-
 
 workflows:
   version: 2
