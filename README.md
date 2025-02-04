@@ -3,7 +3,7 @@
 	<img src="https://img.shields.io/github/v/tag/godatadriven/dbt-date?logo=github">
   </a>
   <a>
-	<img src="https://img.shields.io/badge/License-MIT-yellow.svg">
+	<img src="https://img.shields.io/badge/license-Apache--2.0-ff69b4?style=plastic">
   </a>
   <a>
 	<img src="https://img.shields.io/github/last-commit/godatadriven/dbt-date/main">
