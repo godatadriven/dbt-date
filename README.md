@@ -1,13 +1,8 @@
 <div align="center">
-  <a>
 	<img src="https://img.shields.io/github/v/tag/godatadriven/dbt-date?logo=github">
-  </a>
-  <a>
+  <img src="https://img.shields.io/badge/dbt--core-%3E=1.2%20%3C=1.9.x-orange?logo=dbt">
 	<img src="https://img.shields.io/badge/license-Apache--2.0-ff69b4?style=plastic">
-  </a>
-  <a>
-	<img src="https://img.shields.io/github/last-commit/godatadriven/dbt-date/main">
-  </a>
+  <img src="https://img.shields.io/github/last-commit/godatadriven/dbt-date/main">
 </div>
 
 # dbt-date
