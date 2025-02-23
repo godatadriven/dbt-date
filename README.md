@@ -29,7 +29,7 @@ Include in `packages.yml`
 ```yaml
 packages:
   - package: godatadriven/dbt_date
-    version: 0.10.1
+    version: [">=0.11.0", "<0.12.0"]
     # <see https://github.com/godatadriven/dbt-date/releases/latest> for the latest version tag
 ```
 
