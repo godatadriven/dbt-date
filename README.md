@@ -18,7 +18,7 @@ Development of `dbt-date` is supported by [Xebia Data](https://xebia.com/digital
 
 <div class="row">
   <div class="column" align="center">
-    <img src="./images/xebia-logo-large-transparent.png" href="https://xebia.com/digital-transformation/data-and-ai/" media="(prefers-color-scheme: dark)" alt="Xebia logo" title="Xebia" style="width:40%; padding: 0px 10px 0px 0px">
+    <img src="https://github.com/godatadriven/dbt-date/blob/8fd16fb70af3ff9fffe14439eb4a83cf1d10c03f/images/xebia-logo-large-transparent.png" href="https://xebia.com/digital-transformation/data-and-ai/" media="(prefers-color-scheme: dark)" alt="Xebia logo" title="Xebia" style="width:40%; padding: 0px 10px 0px 0px">
   </div>
 </div>
 
