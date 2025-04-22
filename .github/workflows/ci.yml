@@ -1,0 +1,19 @@
+name: Package Integration Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request_target:
+  workflow_dispatch:
+
+jobs:
+  run-tests:
+    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@v1
+    with:
+      DBT_ENV_SECRET_POSTGRES_PASS: dbt
+      POSTGRES_DATABASE: metastore
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_SCHEMA: dbt_date
+      POSTGRES_USER: dbt
