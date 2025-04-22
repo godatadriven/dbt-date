@@ -19,9 +19,11 @@ repos:
     hooks:
       - id: prettier
         types_or: [json, markdown, yaml]
-  - repo: https://github.com/tconbeer/sqlfmt
-    rev: v0.26.0
+  - repo: local
     hooks:
       - id: sqlfmt
-        language_version: python
-        additional_dependencies: [".[jinjafmt]"]
+        entry: uv run sqlfmt
+        language: system
+        name: sqlfmt
+        require_serial: true
+        types_or: [sql, jinja]
