@@ -12,7 +12,7 @@ integration_tests:
 
     duckdb:
       type: "duckdb"
-      path: ":memory:"
+      path: "./db.duckdb"
       threads: 5
 
     postgres:

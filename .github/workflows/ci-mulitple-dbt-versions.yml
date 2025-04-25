@@ -1,0 +1,66 @@
+name: Integration testing (multiple dbt versions)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request_target:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  DBT_PROJECT_DIR: integration_tests
+  DBT_PROFILES_DIR: integration_tests
+  DBT_ENV_SECRET_POSTGRES_PASS: dbt
+  POSTGRES_DATABASE: metastore
+  POSTGRES_DB: metastore
+  POSTGRES_HOST: localhost
+  POSTGRES_PORT: 5432
+  POSTGRES_SCHEMA: dbt_date
+  POSTGRES_USER: dbt
+  SPARK_HOST: localhost
+  SPARK_METHOD: thrift
+  SPARK_PORT: 10000
+  SPARK_SCHEMA: dbt_date
+  SPARK_USER: dbt
+
+jobs:
+  integration_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        adapter:
+          - duckdb
+          - postgres
+          - spark
+        dbt-version:
+          - "1.6"
+          - "1.7"
+          - "1.8"
+          - "1.9"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+
+      - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
+        if: ${{ matrix.adapter == 'spark' }}
+        run: pip install "dbt-${{ matrix.adapter }}[PyHive]~=${{ matrix.dbt-version }}.0" "dbt-core~=${{ matrix.dbt-version }}.0" tox
+
+      - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
+        if: ${{ matrix.adapter != 'spark' }}
+        run: pip install "dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}.0" "dbt-core~=${{ matrix.dbt-version }}.0" tox
+
+      - name: Install testing dependencies (non-python)
+        if: ${{ matrix.adapter == 'postgres' || matrix.adapter == 'spark' }}
+        run: |
+          docker compose -f ./integration_tests/docker-compose.yml up -d
+          sleep 5
+
+      - name: Run integration tests (${{ matrix.adapter }})
+        run: |
+          tox -e dbt_integration_${{ matrix.adapter }}
