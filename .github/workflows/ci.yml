@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request_target:
+  pull_request: # _target:
     branches:
       - main
   workflow_dispatch:
@@ -12,10 +12,22 @@ on:
 jobs:
   run-tests:
     uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@v1
+    secrets:
+      BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
+      DBT_ENV_SECRET_TRINO_PASS: dbt
     with:
+      BIGQUERY_PROJECT: dbt-date
+      BIGQUERY_SCHEMA: "integration_tests_bigquery_${{ github.run_number }}"
       DBT_ENV_SECRET_POSTGRES_PASS: dbt
       POSTGRES_DATABASE: metastore
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
       POSTGRES_SCHEMA: dbt_date
       POSTGRES_USER: dbt
+      TRINO_CATALOG: dbt
+      TRINO_HOST: localhost
+      TRINO_METHOD: none
+      TRINO_PORT: 8080
+      TRINO_SCHEMA: "integration_tests_trino_${{ github.run_number }}"
+      TRINO_TIMEZONE: UTC
+      TRINO_USER: dbt

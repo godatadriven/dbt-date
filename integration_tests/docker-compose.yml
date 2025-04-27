@@ -1,12 +1,4 @@
 services:
-  dbt-spark3-thrift:
-    image: godatadriven/spark:latest
-    ports:
-      - "10000:10000"
-    command: >
-      --class org.apache.spark.sql.hive.thriftserver.HiveThriftServer2
-      --name Thrift JDBC/ODBC Server
-
   dbt-postgres:
     image: postgres:latest
     ports:
@@ -18,3 +10,16 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_SCHEMA=dbt_date
       - POSTGRES_USER=dbt
+
+  dbt-spark:
+    image: godatadriven/spark:latest
+    ports:
+      - "10000:10000"
+    command: >
+      --class org.apache.spark.sql.hive.thriftserver.HiveThriftServer2
+      --name Thrift JDBC/ODBC Server
+
+  dbt-trino:
+    image: trinodb/trino:latest
+    ports:
+      - "8080:8080"
