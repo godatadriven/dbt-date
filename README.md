@@ -833,11 +833,46 @@ or, optionally, you can override the default timezone:
 {% set datetime_object = dbt_date.datetime(1997, 9, 29, 6, 14, tz='America/New_York') %}
 ```
 
-## Integration Tests (Developers Only)
+## Contributing
 
-This project contains integration tests for all test macros in a separate `integration_tests` dbt project contained in this repo.
+This project contains integration tests for all macros in a separate `integration_tests` dbt project contained in this repo.
 
-To run the tests:
+1. Set up your development environment:
 
-1. You will need a profile called `integration_tests` in `~/.dbt/profiles.yml` pointing to a writable database. We only support postgres, BigQuery and Snowflake.
-2. Then, from within the `integration_tests` folder, run `dbt build` to run the test models in `integration_tests/models/schema_tests/` and run the tests specified in `integration_tests/models/schema_tests/schema.yml`
+   ```shell
+   python -m venv .venv
+   source .venv/bin/activate
+   make setup
+   ```
+
+2. Copy `.env_example` to `.env` and fill in the necessary values. Set the environment variables:
+
+   ```shell
+   source .env
+   ```
+
+3. Run the integration tests:
+
+   - To run all tests in parallel:
+
+     ```shell
+     tox -p all
+     ```
+
+   - To run all tests in series:
+
+     ```shell
+     tox
+     ```
+
+   - To run tests for a specific adapter:
+
+     ```shell
+     tox -e dbt_integration_<ADAPTER>
+     ```
+
+4. To debug on a specific adapters:
+
+   ```shell
+   dbt debug --target <ADAPTER>
+   ```
