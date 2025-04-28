@@ -11,7 +11,8 @@ on:
 
 jobs:
   run-tests:
-    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@v1
+    # uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@v1
+    uses: pgoslatara/dbt-package-testing/.github/workflows/run_tox.yml@support-spark-trino
     secrets:
       BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
       DBT_ENV_SECRET_TRINO_PASS: dbt
@@ -24,6 +25,11 @@ jobs:
       POSTGRES_PORT: 5432
       POSTGRES_SCHEMA: dbt_date
       POSTGRES_USER: dbt
+      SPARK_HOST: localhost
+      SPARK_METHOD: thrift
+      SPARK_PORT: 10000
+      SPARK_SCHEMA: dbt_date
+      SPARK_USER: dbt
       TRINO_CATALOG: dbt
       TRINO_HOST: localhost
       TRINO_METHOD: none
