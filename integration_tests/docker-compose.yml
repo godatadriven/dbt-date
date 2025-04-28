@@ -10,6 +10,11 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_SCHEMA=dbt_date
       - POSTGRES_USER=dbt
+    command: >-
+      --health-cmd pg_isready
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5
 
   dbt-spark:
     image: godatadriven/spark:latest
