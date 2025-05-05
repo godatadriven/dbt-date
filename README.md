@@ -30,14 +30,15 @@ packages:
 
 ## Supported Adapters
 
-| Adapter   | Full Support       | Partial Support    |
-| --------- | ------------------ | ------------------ |
-| BigQuery  | :white_check_mark: |                    |
-| DuckDB    | :white_check_mark: |                    |
-| Postgres  | :white_check_mark: |                    |
-| Spark     | :white_check_mark: |                    |
-| Trino     | :white_check_mark: |                    |
-| Snowflake |                    | :white_check_mark: |
+| Adapter    | Full Support       | Partial Support    |
+| ---------- | ------------------ | ------------------ |
+| BigQuery   | :white_check_mark: |                    |
+| Databricks | :white_check_mark: |                    |
+| DuckDB     | :white_check_mark: |                    |
+| Postgres   | :white_check_mark: |                    |
+| Spark      | :white_check_mark: |                    |
+| Trino      | :white_check_mark: |                    |
+| Snowflake  |                    | :white_check_mark: |
 
 - **Full Support**: Macros are tested against this adapter on every pull request and merge to `main`.
 - **Partial Support**: Macros are not tested against this adapter on every pull request and merge to `main`. Support is provided, please create an [issue](https://github.com/godatadriven/dbt-date/issues).
