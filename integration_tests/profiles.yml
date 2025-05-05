@@ -11,6 +11,15 @@ integration_tests:
       job_retries: 3
       location: US
 
+    databricks:
+      type: databricks
+      catalog: "{{ env_var('DATABRICKS_CATALOG', 'hive_metastore') }}"
+      http_path: "{{ env_var('DATABRICKS_HTTP_PATH') }}"
+      host: "{{ env_var('DATABRICKS_HOST') }}"
+      schema: "{{ env_var('DATABRICKS_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
+      threads: 8
+      token: "{{ env_var('DBT_ENV_SECRET_DATABRICKS_TOKEN') }}"
+
     duckdb:
       type: "duckdb"
       path: "./db.duckdb"

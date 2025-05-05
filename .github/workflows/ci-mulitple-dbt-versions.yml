@@ -15,6 +15,10 @@ env:
   BIGQUERY_PROJECT: dbt-date
   BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
   BIGQUERY_SCHEMA: "integration_tests_bigquery_${{ github.run_number }}"
+  DBT_ENV_SECRET_DATABRICKS_TOKEN: "${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}"
+  DATABRICKS_HTTP_PATH: "${{ vars.DATABRICKS_HTTP_PATH }}"
+  DATABRICKS_HOST: "${{ vars.DATABRICKS_HOST }}"
+  DATABRICKS_SCHEMA: "dbt_date_${{ github.run_number }}"
   DBT_ENV_SECRET_POSTGRES_PASS: dbt
   POSTGRES_DATABASE: metastore
   POSTGRES_HOST: localhost
@@ -43,6 +47,7 @@ jobs:
       matrix:
         adapter:
           - bigquery
+          - databricks
           - duckdb
           - postgres
           - spark

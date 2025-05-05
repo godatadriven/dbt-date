@@ -1,5 +1,6 @@
 dbt-bigquery>=1.9.0,<1.10.0
 dbt-core>=1.9.0,<1.10.0
+dbt-databricks>=1.9.0,<1.10.0
 dbt-duckdb>=1.9.0,<1.10.0
 dbt-postgres>=1.9.0,<1.10.0
 dbt-spark[PyHive]>=1.9.0,<1.10.0
