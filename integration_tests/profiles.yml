@@ -22,7 +22,7 @@ integration_tests:
       user: "{{ env_var('POSTGRES_USER') }}"
       pass: "{{ env_var('DBT_ENV_SECRET_POSTGRES_PASS') }}"
       port: "{{ env_var('POSTGRES_PORT') | as_number }}"
-      dbname: "{{ env_var('POSTGRES_DATABASE', env_var('POSTGRES_DB')) }}"
+      dbname: "{{ env_var('POSTGRES_DATABASE') }}"
       schema: "{{ env_var('POSTGRES_SCHEMA') }}"
       threads: 5
 
