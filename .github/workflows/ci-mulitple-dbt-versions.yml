@@ -17,7 +17,6 @@ env:
   BIGQUERY_SCHEMA: "integration_tests_bigquery_${{ github.run_number }}"
   DBT_ENV_SECRET_POSTGRES_PASS: dbt
   POSTGRES_DATABASE: metastore
-  POSTGRES_DB: metastore
   POSTGRES_HOST: localhost
   POSTGRES_PORT: 5432
   POSTGRES_SCHEMA: dbt_date
