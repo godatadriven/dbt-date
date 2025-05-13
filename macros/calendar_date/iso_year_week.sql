@@ -28,3 +28,21 @@
     end
 
 {%- endmacro -%}
+
+{%- macro trino__iso_year_week(date) -%}
+    case
+        when {{ dbt_date.iso_week_of_year(date) }} = 1
+        then
+            concat(
+                {{ dbt_date.date_part("year", dbt_date.iso_week_end(date)) }},
+                '-W',
+                lpad(cast({{ dbt_date.iso_week_of_year(date) }} as varchar), 2, '0')
+            )
+        else
+            concat(
+                {{ dbt_date.date_part("year", dbt_date.iso_week_start(date)) }},
+                '-W',
+                lpad(cast({{ dbt_date.iso_week_of_year(date) }} as varchar), 2, '0')
+            )
+    end
+{%- endmacro -%}
