@@ -17,13 +17,13 @@
             concat(
                 {{ dbt_date.date_part("year", dbt_date.iso_week_end(date)) }},
                 '-W',
-                lpad(cast({{ dbt_date.iso_week_of_year(date) }} as string), 2, '0')
+                lpad(concat('',{{ dbt_date.iso_week_of_year(date) }}), 2, '0')
             )
         else
             concat(
                 {{ dbt_date.date_part("year", dbt_date.iso_week_start(date)) }},
                 '-W',
-                lpad(cast({{ dbt_date.iso_week_of_year(date) }} as string), 2, '0')
+                lpad(concat('', {{ dbt_date.iso_week_of_year(date) }}), 2, '0')
             )
     end
 
