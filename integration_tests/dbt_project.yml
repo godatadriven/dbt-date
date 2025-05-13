@@ -24,3 +24,7 @@ dispatch:
 vars:
   dbt_date_dispatch_list: ["dbt_date_integration_tests"]
   "dbt_date:time_zone": "America/Los_Angeles"
+
+models:
+  dbt_date_integration_tests:
+    materialized: "{{ 'ephemeral' if target.name == 'trino' else 'table' }}"
