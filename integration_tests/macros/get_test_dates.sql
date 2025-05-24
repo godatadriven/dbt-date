@@ -22,6 +22,8 @@
         11 as month_number,
         'November' as month_name,
         'Nov' as month_name_short,
+        'november' as month_name_dutch,
+        'Nov' as month_name_short_german,
         1623076520 as unix_epoch,
         cast(
             '{{ get_test_timestamps()[0] }}' as {{ dbt.type_timestamp() }}
@@ -68,6 +70,8 @@
         12 as month_number,
         'December' as month_name,
         'Dec' as month_name_short,
+        'december' as month_name_dutch,
+        'Dec' as month_name_short_german,
         1623076520 as unix_epoch,
         cast(
             '{{ get_test_timestamps()[0] }}' as {{ dbt.type_timestamp() }}
