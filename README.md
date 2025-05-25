@@ -73,6 +73,7 @@ For example, use `America/New_York` for East Coast Time.
 - [from_unixtimestamp](#from_unixtimestampepochs-formatseconds)
 - [iso_week_end](#iso_week_enddatenone-tznone)
 - [iso_week_of_year](#iso_week_of_yeardatenone-tznone)
+- [iso_year_week](#iso_year_weekdate)
 - [iso_week_start](#iso_week_startdatenone-tznone)
 - [last_month_name](#last_month_nameshorttrue-tznone)
 - [last_month_number](#last_month_numbertznone)
@@ -305,6 +306,10 @@ or, optionally, you can override the default timezone:
 ```sql
 {{ dbt_date.iso_week_of_year("date_col", tz="America/New_York") }} as iso_week_of_year
 ```
+
+### [iso_year_week](macros/calendar_date/iso_year_week.sql)(`date`)
+
+Computes the year-week combination in ISO-format, e.g. `2026-W01`. Combining year and week seperately will return incorrect results at the edges of the year as start and end dates of the week might fall in a different year. This macro calculates the correct year for the ISO week, e.g. December 31st can fall in week 01 of the next year.
 
 ### [iso_week_start](macros/calendar_date/iso_week_start.sql)(`date=None, tz=None`)
 
