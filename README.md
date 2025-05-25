@@ -66,7 +66,7 @@ For example, use `America/New_York` for East Coast Time.
 
 - [convert_timezone](#convert_timezone-column-target_tznone-source_tznone)
 - [date_part](#date_partdatepart-date)
-- [day_name](#day_namedate-shorttrue)
+- [day_name](#day_namedate-shorttrue-languagedefault)
 - [day_of_month](#day_of_monthdate)
 - [day_of_week](#day_of_weekdate-isoweektrue)
 - [day_of_year](#day_of_yeardate)
@@ -79,7 +79,7 @@ For example, use `America/New_York` for East Coast Time.
 - [last_month_number](#last_month_numbertznone)
 - [last_month](#last_monthtznone)
 - [last_week](#last_weektznone)
-- [month_name](#month_namedate-shorttrue-tznone)
+- [month_name](#month_namedate-shorttrue-tznone-languagedefault)
 - [n_days_ago](#n_days_agon-datenone-tznone)
 - [n_days_away](#n_days_awayn-datenone-tznone)
 - [n_months_ago](#n_months_agon-tznone)
@@ -194,9 +194,9 @@ Usage:
 {{ dbt_date.date_part("dayofweek", "date_col") }} as day_of_week
 ```
 
-### [day_name](macros/calendar_date/day_name.sql)(`date, short=True`)
+### [day_name](macros/calendar_date/day_name.sql)(`date, short=True, language="default"`)
 
-Extracts name of weekday from date.
+Extracts name of weekday from date. For `language=default` this will return the name depending on the language set in the database. To get weekday names in a specific language use the two-letter language abbreviation of a supported language (en, nl, de, fr, es, it, pt, pl, da, sv, tr, cs, fi) or overwrite the `get_localized_datepart_names` macro with your own language of choice.
 
 Usage:
 
@@ -209,7 +209,7 @@ Usage:
 ```
 
 ```sql
-{{ dbt_date.day_name("date_col", short=false) }} as day_of_week_long_name
+{{ dbt_date.day_name("date_col", short=false, language="es") }} as day_of_week_long_name_localized
 ```
 
 ### [day_of_month](macros/calendar_date/day_of_month.sql)(`date`)
@@ -399,9 +399,9 @@ or, optionally, you can override the default timezone:
 {{ dbt_date.last_week(tz="America/New_York)) }} as last_week_start_date
 ```
 
-### [month_name](macros/calendar_date/month_name.sql)(`date, short=True, tz=None`)
+### [month_name](macros/calendar_date/month_name.sql)(`date, short=True, tz=None, language="default"`)
 
-Extracts the name of the month from a date.
+Extracts the name of the month from a date. For `language=default` this will return the name depending on the language set in the database. To get month names in a specific language use the two-letter language abbreviation of a supported language (en, nl, de, fr, es, it, pt, pl, da, sv, tr, cs, fi) or overwrite the `get_localized_datepart_names` macro with your own language of choice.
 
 ```sql
 {{ dbt_date.month_name(date_col) }} as month_short_name
@@ -412,7 +412,7 @@ Extracts the name of the month from a date.
 ```
 
 ```sql
-{{ dbt_date.month_name(date_col, short=false) }} as month_long_name
+{{ dbt_date.month_name(date_col, short=false, language="nl") }} as month_long_name_localized
 ```
 
 ### [n_days_ago](macros/calendar_date/n_days_ago.sql)(`n, date=None, tz=None`)
