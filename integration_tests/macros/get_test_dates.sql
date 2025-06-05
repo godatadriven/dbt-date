@@ -5,6 +5,8 @@
         cast('2020-11-30' as date) as next_date_day,
         'Sunday' as day_name,
         'Sun' as day_name_short,
+        'zondag' as day_name_long_dutch,
+        'Son' as day_name_short_german,
         29 as day_of_month,
         1 as day_of_week,
         7 as iso_day_of_week,
@@ -20,6 +22,8 @@
         11 as month_number,
         'November' as month_name,
         'Nov' as month_name_short,
+        'november' as month_name_dutch,
+        'Nov' as month_name_short_german,
         1623076520 as unix_epoch,
         cast(
             '{{ get_test_timestamps()[0] }}' as {{ dbt.type_timestamp() }}
@@ -50,6 +54,8 @@
         cast('2020-12-02' as date) as next_date_day,
         'Tuesday' as day_name,
         'Tue' as day_name_short,
+        'dinsdag' as day_name_long_dutch,
+        'Di' as day_name_short_german,
         1 as day_of_month,
         3 as day_of_week,
         2 as iso_day_of_week,
@@ -64,6 +70,8 @@
         12 as month_number,
         'December' as month_name,
         'Dec' as month_name_short,
+        'december' as month_name_dutch,
+        'Dec' as month_name_short_german,
         1623076520 as unix_epoch,
         cast(
             '{{ get_test_timestamps()[0] }}' as {{ dbt.type_timestamp() }}

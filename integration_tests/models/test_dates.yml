@@ -11,6 +11,10 @@ models:
       - expression_is_true:
           expression: "day_name_short = {{ dbt_date.day_name('date_day', short=True) }}"
       - expression_is_true:
+          expression: "day_name_long_dutch = {{ dbt_date.day_name('date_day', short=False, language='nl') }}"
+      - expression_is_true:
+          expression: "day_name_short_german = {{ dbt_date.day_name('date_day', language='de') }}"
+      - expression_is_true:
           expression: "day_of_month = {{ dbt_date.day_of_month('date_day') }}"
       - expression_is_true:
           expression: "day_of_week = {{ dbt_date.day_of_week('date_day', isoweek=False) }}"
@@ -39,6 +43,10 @@ models:
           expression: "month_name = {{ dbt_date.month_name('date_day', short=False) }}"
       - expression_is_true:
           expression: "month_name_short = {{ dbt_date.month_name('date_day', short=True) }}"
+      - expression_is_true:
+          expression: "month_name_dutch = {{ dbt_date.month_name('date_day', short=False, language='nl') }}"
+      - expression_is_true:
+          expression: "month_name_short_german = {{ dbt_date.month_name('date_day', language='de') }}"
       - expression_is_true:
           expression: "time_stamp_utc = {{ dbt_date.from_unixtimestamp('unix_epoch') }}"
       - expression_is_true:
