@@ -23,17 +23,12 @@ assignees: ""
 
 ```markdown
 - OS:
-- Python:
-- dbt:
-- dbt-expectations:
+- Python (`python3 --version`):
+- dbt(`dbt --version`):
 ```
+
+**The contents of your `packages.yml` file:**
 
 ### Which database adapter are you using with dbt?
 
-Note: dbt-date currently does not support database adapters other than the ones listed below.
-
-- Postgres
-- Snowflake
-- BigQuery
-
-### Additional Context
+Note: dbt-date currently does not support database adapters other than the ones listed [here](https://github.com/godatadriven/dbt-date?tab=readme-ov-file#supported-adapters).
