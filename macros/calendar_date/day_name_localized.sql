@@ -4,7 +4,7 @@
 
 {%- macro default__day_name_localized(date, short, language) -%}
     case
-        {% for day_num in range(1, 7) %}
+        {% for day_num in range(1, 8) %}  -- Similar to python, last argument is not included
             when {{ dbt_date.day_of_week(date) }} = {{ day_num }}
             then
                 '{{ dbt_date.get_localized_datepart_names(language, "weekdays")["short" if short else "long"]["" ~ day_num] }}'
