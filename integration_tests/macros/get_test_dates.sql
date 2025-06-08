@@ -6,7 +6,7 @@
         'Sunday' as day_name,
         'Sun' as day_name_short,
         'zondag' as day_name_long_dutch,
-        'Son' as day_name_short_german,
+        'So' as day_name_short_german,
         29 as day_of_month,
         1 as day_of_week,
         7 as iso_day_of_week,
