@@ -27,4 +27,4 @@ vars:
 
 models:
   dbt_date_integration_tests:
-    materialized: "{{ 'ephemeral' if target.name == 'trino' else 'table' }}"
+    +materialized: "{{ 'ephemeral' if target.name == 'trino' else 'table' }}"
