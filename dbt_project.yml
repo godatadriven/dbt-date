@@ -3,11 +3,8 @@ version: "0.5.0"
 
 config-version: 2
 
-target-path: "target"
 clean-targets: ["target", "dbt_packages"]
 macro-paths: ["macros"]
-log-path: "logs"
-
 require-dbt-version: [">=1.6.0", "<2.0.0"]
 profile: integration_tests
 
