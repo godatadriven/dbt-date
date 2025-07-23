@@ -75,7 +75,7 @@ jobs:
       - name: Install dbt-bigquery~=1.6 (BigQuery + dbt 1.6 specific versions)
         if: ${{ matrix.adapter == 'bigquery' && matrix.dbt-version == '1.6' }}
         run: |
-          pip install "dbt-bigquery==1.6.13" "dbt-core==1.6.18" "google-cloud-bigquery~=3.15.0" "snowplow-tracker~=1.0.0" "tox~=4.0"
+          pip install "dbt-bigquery==1.6.13" "dbt-core==1.6.18" "dbt-semantic-interfaces==0.2.3" "google-cloud-bigquery~=3.15.0" "snowplow-tracker~=1.0.0" "tox~=4.0"
 
       - name: Install testing dependencies (non-python)
         if: ${{ matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}

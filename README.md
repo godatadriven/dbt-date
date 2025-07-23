@@ -1,6 +1,6 @@
 <div align="center">
 	<img src="https://img.shields.io/github/v/tag/godatadriven/dbt-date?logo=github">
-  <img src="https://img.shields.io/badge/dbt--core-%3E=1.6%20%3C=1.9.x-orange?logo=dbt">
+  <img src="https://img.shields.io/badge/dbt--core-%3E=1.6%20%3C=1.10.x-orange?logo=dbt">
 	<img src="https://img.shields.io/badge/license-Apache--2.0-ff69b4?style=plastic">
   <img src="https://img.shields.io/github/last-commit/godatadriven/dbt-date/main">
 </div>
@@ -24,7 +24,7 @@ Include in `packages.yml`
 ```yaml
 packages:
   - package: godatadriven/dbt_date
-    version: [">=0.11.0", "<0.12.0"]
+    version: [">=0.15.0", "<0.16.0"]
     # <see https://github.com/godatadriven/dbt-date/tags> for the latest version tag
 ```
 
