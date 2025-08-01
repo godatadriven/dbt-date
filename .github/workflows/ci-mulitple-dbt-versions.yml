@@ -53,10 +53,7 @@ jobs:
           - spark
           - trino
         dbt-version:
-          - "1.6"
-          - "1.7"
-          - "1.8"
-          - "1.9"
+          - "1.10"
 
     steps:
       - uses: actions/checkout@v4
@@ -66,16 +63,11 @@ jobs:
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }} (including Spark extra)
         if: ${{ matrix.adapter == 'spark' }}
-        run: pip install "dbt-${{ matrix.adapter }}[PyHive]~=${{ matrix.dbt-version }}.0" "dbt-core~=${{ matrix.dbt-version }}.0" tox
+        run: pip install "dbt-${{ matrix.adapter }}[PyHive]" "dbt-core~=${{ matrix.dbt-version }}" tox
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
         if: ${{ matrix.adapter != 'spark' && !(matrix.adapter == 'bigquery' && matrix.dbt-version == '1.6') }}
-        run: pip install "dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}.0" "dbt-core~=${{ matrix.dbt-version }}.0" tox
-
-      - name: Install dbt-bigquery~=1.6 (BigQuery + dbt 1.6 specific versions)
-        if: ${{ matrix.adapter == 'bigquery' && matrix.dbt-version == '1.6' }}
-        run: |
-          pip install "click==8.1.8" "dbt-bigquery==1.6.13" "dbt-core==1.6.18" "dbt-semantic-interfaces==0.2.3" "google-api-core==2.25.1" "google-auth==2.40.3" "google-cloud-bigquery==3.15.0" "snowplow-tracker==1.0.4" "tox==4.27.0"
+        run: pip install "dbt-${{ matrix.adapter }}" "dbt-core~=${{ matrix.dbt-version }}" tox
 
       - name: Install testing dependencies (non-python)
         if: ${{ matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}
