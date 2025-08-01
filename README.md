@@ -43,6 +43,13 @@ packages:
 - **Full Support**: Macros are tested against this adapter on every pull request and merge to `main`.
 - **Partial Support**: Macros are not tested against this adapter on every pull request and merge to `main`. Support is provided, please create an [issue](https://github.com/godatadriven/dbt-date/issues).
 
+## Supported Versions
+
+| dbt Core      | dbt-date <=0.15    | dbt-date >=0.16    |
+| ------------- | ------------------ | ------------------ |
+| >=1.10.5      | :x:                | :white_check_mark: |
+| >=1.6,<1.10.5 | :white_check_mark: | :x:                |
+
 ## Variables
 
 The following variables need to be defined in your `dbt_project.yml` file:
