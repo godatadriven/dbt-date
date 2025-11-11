@@ -5,7 +5,7 @@ profile: "integration_tests"
 
 config-version: 2
 
-require-dbt-version: ">=1.10.5"
+require-dbt-version: [">=1.10.5", "<3.0.0"]
 
 model-paths: ["models"]
 test-paths: ["tests"]

@@ -1,6 +1,7 @@
 .tox/
 .venv/
 dbt_date.egg-info/
+dbt_internal_packages/
 dbt_packages/
 integration_tests/.hive-metastore/
 integration_tests/.spark-warehouse/
