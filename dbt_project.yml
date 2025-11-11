@@ -5,7 +5,7 @@ config-version: 2
 
 clean-targets: ["target", "dbt_packages"]
 macro-paths: ["macros"]
-require-dbt-version: ">=1.10.5"
+require-dbt-version: [">=1.10.5", "<3.0.0"]
 profile: integration_tests
 
 quoting:
