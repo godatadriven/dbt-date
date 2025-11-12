@@ -79,7 +79,7 @@ jobs:
         run: |
           tox -e dbt_integration_${{ matrix.adapter }}
 
-  fusion_integration_tests:
+  integration_tests_fusion:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -93,6 +93,18 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
+
+      # Having a DuckDB adapter in profiles.yml is unsupported by Fusion (even if unused)
+      - name: Update profiles.yml
+        run: |
+          yq -i eval 'del .integration_tests.outputs.duckdb' ./integration_tests/profiles.yml
+          yq -i eval '.integration_tests.target = "bigquery"' ./integration_tests/profiles.yml
+
+      # Fusion for BigQuery requires a different auth method
+      - name: Save BigQuery key file as a file
+        if: ${{ matrix.adapter }} == 'bigquery'
+        run: |
+          echo -n "${{ secrets.BIGQUERY_KEYFILE_JSON_BASE64 }}" | base64 --decode >> ./integration_tests/service-key-file.json
 
       - name: Install tox
         run: pip install tox
