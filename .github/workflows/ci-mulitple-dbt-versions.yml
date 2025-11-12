@@ -78,3 +78,40 @@ jobs:
       - name: Run integration tests (${{ matrix.adapter }})
         run: |
           tox -e dbt_integration_${{ matrix.adapter }}
+
+  fusion_integration_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        adapter:
+          - bigquery
+          - databricks
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+
+      - name: Install tox
+        run: pip install tox
+
+      - name: Install dbt Fusion
+        run: |
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Verify dbt installation
+        run: dbt --version
+
+      - name: Run fusion integration tests (${{ matrix.adapter }})
+        env:
+          BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
+          BIGQUERY_PROJECT: ${{ env.BIGQUERY_PROJECT }}
+          BIGQUERY_SCHEMA: ${{ env.BIGQUERY_SCHEMA }}
+          DBT_ENV_SECRET_DATABRICKS_TOKEN: ${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}
+          DATABRICKS_HTTP_PATH: ${{ vars.DATABRICKS_HTTP_PATH }}
+          DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
+          DATABRICKS_SCHEMA: ${{ env.DATABRICKS_SCHEMA }}
+        run: |
+          tox -e fusion_integration_${{ matrix.adapter }}
