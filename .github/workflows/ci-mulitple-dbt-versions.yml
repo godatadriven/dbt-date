@@ -99,7 +99,9 @@ jobs:
           yq -i eval 'del .integration_tests.outputs.duckdb' ./integration_tests/profiles.yml
           yq -i eval '.integration_tests.target = "bigquery"' ./integration_tests/profiles.yml
 
-      - run: |
+      - name: Save BigQuery key file as a file
+        if: ${{ matrix.adapter }} == 'bigquery'
+        run: |
           echo -n "${{ secrets.BIGQUERY_KEYFILE_JSON_BASE64 }}" | base64 --decode >> ./integration_tests/service-key-file.json
 
       - name: Install tox
@@ -114,7 +116,6 @@ jobs:
 
       - name: Run fusion integration tests (${{ matrix.adapter }})
         env:
-          BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
           BIGQUERY_PROJECT: ${{ env.BIGQUERY_PROJECT }}
           BIGQUERY_SCHEMA: ${{ env.BIGQUERY_SCHEMA }}
           DBT_ENV_SECRET_DATABRICKS_TOKEN: ${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}
