@@ -100,7 +100,7 @@ jobs:
           yq -i eval '.integration_tests.target = "bigquery"' ./integration_tests/profiles.yml
 
       - run: |
-          echo """${{ secrets.BIGQUERY_KEYFILE_JSON }}""" > ./integration_tests/service-key-file.json
+          echo -n "${{ secrets.BIGQUERY_KEYFILE_JSON_BASE64 }}" | base64 --decode >> ./integration_tests/service-key-file.json
 
       - name: Install tox
         run: pip install tox
