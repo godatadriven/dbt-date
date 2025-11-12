@@ -3,7 +3,7 @@ integration_tests:
   outputs:
     bigquery:
       type: "bigquery"
-      method: service-account-json
+      method: service-account
       project: "{{ env_var('BIGQUERY_PROJECT') }}"
       dataset: "{{ env_var('BIGQUERY_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
       threads: 10
