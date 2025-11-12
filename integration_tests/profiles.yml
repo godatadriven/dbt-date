@@ -7,7 +7,7 @@ integration_tests:
       project: "{{ env_var('BIGQUERY_PROJECT') }}"
       dataset: "{{ env_var('BIGQUERY_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
       threads: 10
-      keyfile: "{{ env_var('BIGQUERY_KEYFILE_JSON') | as_native}}"
+      keyfile: ./service-key-file.json
       job_retries: 3
       location: US
 
