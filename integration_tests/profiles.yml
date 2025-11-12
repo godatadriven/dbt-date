@@ -3,11 +3,11 @@ integration_tests:
   outputs:
     bigquery:
       type: "bigquery"
-      method: "service-account-json"
+      method: service-account-json
       project: "{{ env_var('BIGQUERY_PROJECT') }}"
       dataset: "{{ env_var('BIGQUERY_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
       threads: 10
-      keyfile_json: "{{ env_var('BIGQUERY_KEYFILE_JSON') | as_native}}"
+      keyfile: "{{ env_var('BIGQUERY_KEYFILE_JSON') | as_native}}"
       job_retries: 3
       location: US
 
