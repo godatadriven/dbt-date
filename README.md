@@ -30,6 +30,8 @@ packages:
 
 ## Supported Adapters
 
+### Core
+
 | Adapter    | Full Support       | Partial Support    |
 | ---------- | ------------------ | ------------------ |
 | BigQuery   | :white_check_mark: |                    |
@@ -42,6 +44,13 @@ packages:
 
 - **Full Support**: Macros are tested against this adapter on every pull request and merge to `main`.
 - **Partial Support**: Macros are not tested against this adapter on every pull request and merge to `main`. Support is provided, please create an [issue](https://github.com/godatadriven/dbt-date/issues).
+
+### Fusion
+
+| Adapter    | Supported          |
+| ---------- | ------------------ |
+| BigQuery   | :white_check_mark: |
+| Databricks | :white_check_mark: |
 
 ## Supported Versions
 
