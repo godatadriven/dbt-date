@@ -1,5 +1,5 @@
 integration_tests:
-  target: duckdb
+  target: databricks
   outputs:
     bigquery:
       type: "bigquery"
@@ -20,10 +20,10 @@ integration_tests:
       threads: 8
       token: "{{ env_var('DBT_ENV_SECRET_DATABRICKS_TOKEN') }}"
 
-    duckdb:
-      type: "duckdb"
-      path: "./db.duckdb"
-      threads: 5
+    # duckdb:
+    #   type: "duckdb"
+    #   path: "./db.duckdb"
+    #   threads: 5
 
     postgres:
       type: "postgres"
