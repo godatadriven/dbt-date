@@ -14,3 +14,4 @@ logs/
 target/
 .env
 db.duckdb
+dbt_internal_packages/
