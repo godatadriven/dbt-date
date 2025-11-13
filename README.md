@@ -477,7 +477,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_months_ago](macros/calendar_date/n_months_ago.sql)(`n, tz=None`)
 
-Gets date _n_ months ago, based on local date.
+Gets timestamp _n_ months ago, based on local date.
 
 Usage:
 
@@ -493,7 +493,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_months_away](macros/calendar_date/n_months_away.sql)(`n, tz=None`)
 
-Gets date _n_ months away, based on local date.
+Gets timestamp _n_ months away, based on local date.
 
 Usage:
 
@@ -509,7 +509,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_weeks_ago](macros/calendar_date/n_weeks_ago.sql)(`n, tz=None`)
 
-Gets date _n_ weeks ago, based on local date.
+Gets timestamp _n_ weeks ago, based on local date.
 
 Usage:
 
@@ -525,7 +525,7 @@ or, optionally, you can override the default timezone:
 
 ### [n_weeks_away](macros/calendar_date/n_weeks_away.sql)(`n, tz=None`)
 
-Gets date _n_ weeks away, based on local date.
+Gets timestamp _n_ weeks away, based on local date.
 
 Usage:
 
