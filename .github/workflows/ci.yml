@@ -12,6 +12,8 @@ on:
 jobs:
   run-tests:
     uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@v1
+    permissions:
+      contents: read
     secrets:
       BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
       DBT_ENV_SECRET_DATABRICKS_TOKEN: "${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}"

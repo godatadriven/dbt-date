@@ -42,6 +42,8 @@ env:
 jobs:
   integration_tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -81,6 +83,8 @@ jobs:
 
   integration_tests_fusion:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
