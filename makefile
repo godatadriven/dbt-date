@@ -1,5 +1,5 @@
 setup:
-	pip install -r dev-requirements.txt
+	uv sync --all-extras
 	docker compose -f ./integration_tests/docker-compose.yml up -d
 
 teardown:
