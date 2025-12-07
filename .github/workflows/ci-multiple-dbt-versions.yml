@@ -67,6 +67,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -74,11 +79,11 @@ jobs:
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }} (including Spark extra)
         if: ${{ matrix.adapter == 'spark' }}
-        run: pip install --pre "dbt-${{ matrix.adapter }}[PyHive]~=${{ matrix.dbt-version }}.0a0" "dbt-core~=${{ matrix.dbt-version }}.0a0" tox
+        run: uv pip install --system --prerelease allow "dbt-${{ matrix.adapter }}[PyHive]~=${{ matrix.dbt-version }}.0a0" "dbt-core~=${{ matrix.dbt-version }}.0a0" tox tox-uv
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
         if: ${{ matrix.adapter != 'spark' }}
-        run: pip install --pre "dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}.0a0" "dbt-core~=${{ matrix.dbt-version }}.0a0" tox
+        run: uv pip install --system --prerelease allow "dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}.0a0" "dbt-core~=${{ matrix.dbt-version }}.0a0" tox tox-uv
 
       - name: Install testing dependencies (non-python)
         if: ${{ matrix.adapter == 'clickhouse' || matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}
@@ -135,13 +140,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version-file: .python-version
 
       - name: Install dbt-duckdb
-        run: pip install --pre "dbt-duckdb" "dbt-core~=2.0.0a0" tox
+        run: uv pip install --system --prerelease allow "dbt-duckdb" "dbt-core~=2.0.0a0" tox tox-uv
 
       - name: Run integration tests
         run: |

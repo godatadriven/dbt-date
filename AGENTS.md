@@ -38,11 +38,11 @@ When converting an existing macro to be dispatchable:
 
 ## Local development
 
-Python deps are managed with `uv` (see `dev-requirements.txt`). Pre-commit uses `sqlfmt` for SQL/Jinja formatting (`uv run sqlfmt`).
+Python deps are managed with `uv` (see `pyproject.toml`). Pre-commit uses `sqlfmt` for SQL/Jinja formatting (`uv run sqlfmt`).
 
 ```bash
 # One-time setup
-make setup          # installs dev-requirements.txt + starts docker compose (postgres, spark, trino)
+make setup          # runs uv sync + starts docker compose (postgres, spark, trino)
 
 # Run a single adapter (duckdb is fastest, no docker needed)
 tox -e dbt_integration_duckdb
