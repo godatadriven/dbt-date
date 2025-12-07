@@ -60,16 +60,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
       - name: Set up Python
         uses: actions/setup-python@v5
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }} (including Spark extra)
         if: ${{ matrix.adapter == 'spark' }}
-        run: pip install "dbt-${{ matrix.adapter }}[PyHive]" "dbt-core~=${{ matrix.dbt-version }}" tox
+        run: uv pip install --system "dbt-${{ matrix.adapter }}[PyHive]" "dbt-core~=${{ matrix.dbt-version }}" tox tox-uv
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
         if: ${{ matrix.adapter != 'spark' && !(matrix.adapter == 'bigquery' && matrix.dbt-version == '1.6') }}
-        run: pip install "dbt-${{ matrix.adapter }}" "dbt-core~=${{ matrix.dbt-version }}" tox
+        run: uv pip install --system "dbt-${{ matrix.adapter }}" "dbt-core~=${{ matrix.dbt-version }}" tox tox-uv
 
       - name: Install testing dependencies (non-python)
         if: ${{ matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}
@@ -95,6 +100,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
       - name: Set up Python
         uses: actions/setup-python@v5
 
@@ -111,7 +121,7 @@ jobs:
           echo -n "${{ secrets.BIGQUERY_KEYFILE_JSON_BASE64 }}" | base64 --decode >> ./integration_tests/service-key-file.json
 
       - name: Install tox
-        run: pip install tox
+        run: uv pip install --system tox tox-uv
 
       - name: Install dbt Fusion
         run: |
