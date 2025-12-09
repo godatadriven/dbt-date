@@ -41,7 +41,7 @@ env:
 
 jobs:
   integration_tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: read
     strategy:
