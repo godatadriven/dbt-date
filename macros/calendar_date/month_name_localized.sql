@@ -4,7 +4,7 @@
 
 {%- macro default__month_name_localized(date, short, language) -%}
     case
-        {% for month_num in range(1, 12) %}
+        {% for month_num in range(1, 13) %}
             when {{ dbt_date.date_part("month", date) }} = {{ month_num }}
             then
                 '{{ dbt_date.get_localized_datepart_names(language, "months")["short" if short else "long"]["" ~ month_num] }}'
