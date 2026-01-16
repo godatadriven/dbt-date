@@ -71,7 +71,7 @@
         'December' as month_name,
         'Dec' as month_name_short,
         'december' as month_name_dutch,
-        'Dec' as month_name_short_german,
+        'Dez' as month_name_short_german,
         1623076520 as unix_epoch,
         cast(
             '{{ get_test_timestamps()[0] }}' as {{ dbt.type_timestamp() }}
