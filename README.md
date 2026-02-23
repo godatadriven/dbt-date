@@ -862,8 +862,10 @@ This project contains integration tests for all macros in a separate `integratio
 1. Set up your development environment:
 
    ```shell
-   python -m venv .venv
-   source .venv/bin/activate
+   # Install uv if you haven't already
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   
+   # Sync dependencies and set up the environment
    make setup
    ```
 
