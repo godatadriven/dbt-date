@@ -107,7 +107,7 @@ jobs:
 
       # Fusion for BigQuery requires a different auth method
       - name: Save BigQuery key file as a file
-        if: ${{ matrix.adapter }} == 'bigquery'
+        if: ${{ matrix.adapter == 'bigquery' }}
         run: |
           echo -n "${{ secrets.BIGQUERY_KEYFILE_JSON_BASE64 }}" | base64 --decode >> ./integration_tests/service-key-file.json
 
