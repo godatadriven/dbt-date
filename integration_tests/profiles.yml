@@ -5,7 +5,7 @@ integration_tests:
       type: "bigquery"
       method: "service-account-json"
       project: "{{ env_var('BIGQUERY_PROJECT') }}"
-      dataset: "{{ env_var('BIGQUERY_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
+      dataset: "{{ env_var('BIGQUERY_SCHEMA') }}{{ env_var('DBT_SUFFIX', '') }}"
       threads: 10
       keyfile_json: "{{ env_var('BIGQUERY_KEYFILE_JSON') | as_native}}"
       job_retries: 3
@@ -16,7 +16,7 @@ integration_tests:
       type: "bigquery"
       method: service-account
       project: "{{ env_var('BIGQUERY_PROJECT') }}"
-      dataset: "{{ env_var('BIGQUERY_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
+      dataset: "{{ env_var('BIGQUERY_SCHEMA') }}{{ env_var('DBT_SUFFIX', '') }}"
       threads: 10
       keyfile: ./service-key-file.json
       job_retries: 3
@@ -27,7 +27,7 @@ integration_tests:
       catalog: "{{ env_var('DATABRICKS_CATALOG', 'hive_metastore') }}"
       http_path: "{{ env_var('DATABRICKS_HTTP_PATH') }}"
       host: "{{ env_var('DATABRICKS_HOST') }}"
-      schema: "{{ env_var('DATABRICKS_SCHEMA') }}_{{ modules.datetime.datetime.now().strftime('%f') }}"
+      schema: "{{ env_var('DATABRICKS_SCHEMA') }}{{ env_var('DBT_SUFFIX', '') }}"
       threads: 8
       token: "{{ env_var('DBT_ENV_SECRET_DATABRICKS_TOKEN') }}"
 

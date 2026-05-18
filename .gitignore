@@ -10,6 +10,7 @@ integration_tests/dbt_packages/
 integration_tests/logs/
 integration_tests/target/
 integration_tests/.user.yml
+integration_tests/service-key-file.json
 logs/
 target/
 .env
