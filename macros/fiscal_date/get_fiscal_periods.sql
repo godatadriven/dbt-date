@@ -1,4 +1,8 @@
 {% macro get_fiscal_periods(dates, year_end_month, week_start_day, shift_year=1) %}
+    {{ return(adapter.dispatch('get_fiscal_periods', 'dbt_date')(dates, year_end_month, week_start_day, shift_year)) }}
+{% endmacro %}
+
+{% macro default__get_fiscal_periods(dates, year_end_month, week_start_day, shift_year=1) %}
     {#
 This macro requires you to pass in a ref to a date dimension, created via
 dbt_date.get_date_dimension()s
