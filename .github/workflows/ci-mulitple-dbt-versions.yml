@@ -79,6 +79,7 @@ jobs:
 
       - name: Run integration tests (${{ matrix.adapter }})
         run: |
+          export DBT_SUFFIX=_$(date +%6N)
           tox -e dbt_integration_${{ matrix.adapter }}
 
   integration_tests_fusion:
@@ -131,4 +132,5 @@ jobs:
           DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
           DATABRICKS_SCHEMA: ${{ env.DATABRICKS_SCHEMA }}
         run: |
+          export DBT_SUFFIX=_$(date +%6N)
           tox -e fusion_integration_${{ matrix.adapter }}
