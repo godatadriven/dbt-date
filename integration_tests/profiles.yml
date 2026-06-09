@@ -79,3 +79,13 @@ integration_tests:
       schema: "{{ env_var('TRINO_SCHEMA') }}"
       timezone: "{{ env_var('TRINO_TIMEZONE') }}"
       threads: 12
+
+    clickhouse:
+      type: clickhouse
+      driver: http
+      host: "{{ env_var('CLICKHOUSE_HOST') }}"
+      port: "{{ env_var('CLICKHOUSE_PORT') | as_number }}"
+      user: "{{ env_var('CLICKHOUSE_USER') }}"
+      schema: "{{ env_var('CLICKHOUSE_SCHEMA') }}"
+      secure: false
+      threads: 5

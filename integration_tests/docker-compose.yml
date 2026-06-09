@@ -23,3 +23,16 @@ services:
     image: trinodb/trino:latest
     ports:
       - "8080:8080"
+
+  dbt-clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      # Allow the default user to connect without a password
+      - CLICKHOUSE_SKIP_USER_SETUP=1
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144

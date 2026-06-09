@@ -38,6 +38,23 @@
     )
 {%- endmacro -%}
 
+{# sqlfmt disabled below: ClickHouse function names are case-sensitive #}
+-- fmt: off
+{% macro clickhouse__convert_timezone(column, target_tz, source_tz) -%}
+    {#
+        ClickHouse DateTime is timezone-aware, so toTimeZone only changes the
+        displayed zone, not the instant. Round-tripping through a string drops the
+        zone and returns the target wall-clock as a naive DateTime, matching the
+        timezone-naive result the other adapters produce.
+    #}
+    toDateTime(
+        toString(
+            toTimeZone(toDateTime({{ column }}, '{{ source_tz }}'), '{{ target_tz }}')
+        )
+    )
+{%- endmacro -%}
+-- fmt: on
+
 {%- macro trino__convert_timezone(column, target_tz, source_tz) -%}
     cast(
         (

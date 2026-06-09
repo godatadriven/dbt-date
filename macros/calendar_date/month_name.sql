@@ -54,3 +54,15 @@
     {%- else -%} {{ dbt_date.month_name_localized(date, short, language) }}
     {%- endif -%}
 {%- endmacro %}
+
+{# sqlfmt disabled below: ClickHouse function names are case-sensitive #}
+-- fmt: off
+{%- macro clickhouse__month_name(date, short, language) -%}
+    {%- if language == "default" -%}
+        {%- if short -%} formatDateTime({{ date }}, '%b')
+        {%- else -%} dateName('month', {{ date }})
+        {%- endif -%}
+    {%- else -%} {{ dbt_date.month_name_localized(date, short, language) }}
+    {%- endif -%}
+{%- endmacro %}
+-- fmt: on

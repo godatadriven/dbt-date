@@ -38,6 +38,10 @@ env:
   TRINO_SCHEMA: dbt
   TRINO_TIMEZONE: UTC
   TRINO_USER: dbt
+  CLICKHOUSE_HOST: localhost
+  CLICKHOUSE_PORT: "8123"
+  CLICKHOUSE_SCHEMA: dbt_date
+  CLICKHOUSE_USER: default
 
 jobs:
   integration_tests:
@@ -49,6 +53,7 @@ jobs:
       matrix:
         adapter:
           - bigquery
+          - clickhouse
           - databricks
           - duckdb
           - postgres
@@ -72,7 +77,7 @@ jobs:
         run: pip install "dbt-${{ matrix.adapter }}" "dbt-core~=${{ matrix.dbt-version }}" tox
 
       - name: Install testing dependencies (non-python)
-        if: ${{ matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}
+        if: ${{ matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' || matrix.adapter == 'clickhouse' }}
         run: |
           docker compose -f ./integration_tests/docker-compose.yml up -d dbt-${{ matrix.adapter }}
           sleep 30

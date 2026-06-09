@@ -35,6 +35,7 @@ packages:
 | Adapter    | Full Support       | Partial Support    |
 | ---------- | ------------------ | ------------------ |
 | BigQuery   | :white_check_mark: |                    |
+| ClickHouse | :white_check_mark: |                    |
 | Databricks | :white_check_mark: |                    |
 | DuckDB     | :white_check_mark: |                    |
 | Postgres   | :white_check_mark: |                    |
@@ -854,6 +855,13 @@ or, optionally, you can override the default timezone:
 ```sql
 {% set datetime_object = dbt_date.datetime(1997, 9, 29, 6, 14, tz='America/New_York') %}
 ```
+
+> **ClickHouse note:** `datetime()` returns a timezone-aware value, so its string form
+> includes a UTC offset (e.g. `1997-09-29 06:14:00-07:53`). If you cast that string to a
+> ClickHouse `DateTime` (e.g. `cast('{{ dbt_date.datetime(...) }}' as {{ dbt.type_timestamp() }})`),
+> ClickHouse versions before 26.5 can't parse the offset with the default parser. Either
+> use ClickHouse >= 26.5, set `cast_string_to_date_time_mode: best_effort` in your
+> profile's `custom_settings`, or pass a value without a timezone.
 
 ## Contributing
 

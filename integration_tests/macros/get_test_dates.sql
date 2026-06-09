@@ -214,3 +214,11 @@
 {% macro spark__get_test_timestamps() -%}
     {{ return(["2021-06-07 07:35:20.000000", "2021-06-07 14:35:20.000000"]) }}
 {%- endmacro %}
+
+{% macro clickhouse__get_test_timestamps() -%}
+    {# ClickHouse can't CAST the default fixtures' timezone-NAME suffix
+       (e.g. 'America/Los_Angeles') to DateTime, not even with
+       cast_string_to_date_time_mode=best_effort, and the convert_timezone tests need
+       naive wall-clock values, so use plain timestamps here. #}
+    {{ return(["2021-06-07 07:35:20", "2021-06-07 14:35:20"]) }}
+{%- endmacro %}

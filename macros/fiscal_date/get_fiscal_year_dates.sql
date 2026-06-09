@@ -89,12 +89,14 @@
         fiscal_year_dates as (
 
             select
-                d.date_day,
-                m.fiscal_year_number,
-                m.fiscal_year_start_date,
-                m.fiscal_year_end_date,
-                w.week_start_date,
-                w.week_end_date,
+                -- Explicit aliases needed for ClickHouse in this context 
+                -- as column names keep their source-table qualifier
+                d.date_day as date_day,
+                m.fiscal_year_number as fiscal_year_number,
+                m.fiscal_year_start_date as fiscal_year_start_date,
+                m.fiscal_year_end_date as fiscal_year_end_date,
+                w.week_start_date as week_start_date,
+                w.week_end_date as week_end_date,
                 -- we reset the weeks of the year starting with the merch year start
                 -- date
                 dense_rank() over (
