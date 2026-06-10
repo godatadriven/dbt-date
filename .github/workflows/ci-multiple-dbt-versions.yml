@@ -1,4 +1,10 @@
-name: Integration testing (multiple dbt versions)
+name: Integration testing (no-secret adapters)
+
+# Runs on every PR and push. Only covers adapters that need no GitHub
+# secrets (the docker-compose-backed ones plus duckdb), so fork PRs work
+# the same as same-repo PRs. Secret-bearing adapters live in
+# ci-secret-adapters.yml and are triggered by a maintainer commenting
+# `/ok-to-test <sha>` on the PR.
 
 on:
   push:
@@ -17,17 +23,10 @@ on:
 env:
   DBT_PROJECT_DIR: integration_tests
   DBT_PROFILES_DIR: integration_tests
-  BIGQUERY_PROJECT: dbt-date
-  BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
-  BIGQUERY_SCHEMA: "integration_tests_bigquery_${{ github.run_number }}"
   CLICKHOUSE_HOST: localhost
   CLICKHOUSE_PORT: "8123"
   CLICKHOUSE_SCHEMA: dbt_date
   CLICKHOUSE_USER: default
-  DBT_ENV_SECRET_DATABRICKS_TOKEN: "${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}"
-  DATABRICKS_HTTP_PATH: "${{ vars.DATABRICKS_HTTP_PATH }}"
-  DATABRICKS_HOST: "${{ vars.DATABRICKS_HOST }}"
-  DATABRICKS_SCHEMA: "dbt_date_${{ github.run_number }}"
   DBT_ENV_SECRET_POSTGRES_PASS: dbt
   POSTGRES_DATABASE: metastore
   POSTGRES_HOST: localhost
@@ -47,6 +46,7 @@ env:
   TRINO_SCHEMA: dbt
   TRINO_TIMEZONE: UTC
   TRINO_USER: dbt
+
 jobs:
   integration_tests:
     runs-on: ubuntu-latest
@@ -56,22 +56,13 @@ jobs:
       fail-fast: false
       matrix:
         adapter:
-          - bigquery
           - clickhouse
-          - databricks
           - duckdb
           - postgres
           - spark
           - trino
         dbt-version:
           - "1.10"
-        # Only BigQuery, Databricks, and dbt-core have a 1.11 stable on PyPI
-        # as of this PR. Add other adapters to this include list as they ship.
-        include:
-          - adapter: bigquery
-            dbt-version: "1.11"
-          - adapter: databricks
-            dbt-version: "1.11"
 
     steps:
       - uses: actions/checkout@v4
@@ -86,7 +77,7 @@ jobs:
         run: pip install "dbt-${{ matrix.adapter }}[PyHive]~=${{ matrix.dbt-version }}.0" "dbt-core~=${{ matrix.dbt-version }}.0" tox
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
-        if: ${{ matrix.adapter != 'spark' && !(matrix.adapter == 'bigquery' && matrix.dbt-version == '1.6') }}
+        if: ${{ matrix.adapter != 'spark' }}
         run: pip install "dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}.0" "dbt-core~=${{ matrix.dbt-version }}.0" tox
 
       - name: Install testing dependencies (non-python)
@@ -135,58 +126,3 @@ jobs:
         run: |
           export DBT_SUFFIX=_$(date +%6N)
           tox -e dbt_integration_${{ matrix.adapter }}
-
-  integration_tests_fusion:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        adapter:
-          - bigquery
-          - databricks
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: .python-version
-
-      # Having a DuckDB adapter in profiles.yml is unsupported by Fusion (even if unused)
-      - name: Update profiles.yml
-        run: |
-          yq -i eval 'del .integration_tests.outputs.duckdb' ./integration_tests/profiles.yml
-          yq -i eval '.integration_tests.target = "bigquery"' ./integration_tests/profiles.yml
-
-      # Fusion for BigQuery requires a different auth method
-      - name: Save BigQuery key file as a file
-        if: ${{ matrix.adapter == 'bigquery' }}
-        run: |
-          echo -n "${{ secrets.BIGQUERY_KEYFILE_JSON_BASE64 }}" | base64 --decode >> ./integration_tests/service-key-file.json
-
-      - name: Install tox
-        run: pip install tox
-
-      - name: Install dbt Fusion
-        run: |
-          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Verify dbt installation
-        run: dbt --version
-
-      - name: Run fusion integration tests (${{ matrix.adapter }})
-        env:
-          BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
-          BIGQUERY_PROJECT: ${{ env.BIGQUERY_PROJECT }}
-          BIGQUERY_SCHEMA: ${{ env.BIGQUERY_SCHEMA }}
-          DBT_ENV_SECRET_DATABRICKS_TOKEN: ${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}
-          DATABRICKS_HTTP_PATH: ${{ vars.DATABRICKS_HTTP_PATH }}
-          DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
-          DATABRICKS_SCHEMA: ${{ env.DATABRICKS_SCHEMA }}
-        run: |
-          export DBT_SUFFIX=_$(date +%6N)
-          tox -e fusion_integration_${{ matrix.adapter }}
