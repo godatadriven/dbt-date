@@ -30,3 +30,10 @@
 {%- macro duckdb__week_start(date) -%}
     {{ return(dbt_date.postgres__week_start(date)) }}
 {%- endmacro %}
+
+{# sqlfmt disabled below: ClickHouse function names are case-sensitive #}
+-- fmt: off
+{%- macro clickhouse__week_start(date) -%}
+    cast(toStartOfWeek({{ date }}, 0) as date)
+{%- endmacro %}
+-- fmt: on

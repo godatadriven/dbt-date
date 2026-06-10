@@ -54,3 +54,15 @@
     {%- else -%} {{ dbt_date.day_name_localized(date, short, language) }}
     {%- endif -%}
 {%- endmacro -%}
+
+{# sqlfmt disabled below: ClickHouse function names are case-sensitive #}
+-- fmt: off
+{%- macro clickhouse__day_name(date, short, language) -%}
+    {%- if language == "default" -%}
+        {%- if short -%} formatDateTime({{ date }}, '%a')
+        {%- else -%} dateName('weekday', {{ date }})
+        {%- endif -%}
+    {%- else -%} {{ dbt_date.day_name_localized(date, short, language) }}
+    {%- endif -%}
+{%- endmacro -%}
+-- fmt: on

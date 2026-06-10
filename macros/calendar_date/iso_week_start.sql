@@ -30,3 +30,7 @@
 {%- macro trino__iso_week_start(date) -%}
     {{ dbt_date._iso_week_start(date, "week") }}
 {%- endmacro %}
+
+{%- macro clickhouse__iso_week_start(date) -%}
+    {{ dbt_date._iso_week_start(date, "week") }}
+{%- endmacro %}

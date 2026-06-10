@@ -108,3 +108,19 @@
     {% endif -%}
     cast(to_timestamp({{ epochs }}) at time zone 'UTC' as timestamp)
 {%- endmacro %}
+
+{# sqlfmt disabled below: ClickHouse function names are case-sensitive #}
+-- fmt: off
+{%- macro clickhouse__from_unixtimestamp(epochs, format="seconds") -%}
+    {%- if format != "seconds" -%}
+        {{
+            exceptions.raise_compiler_error(
+                "value "
+                ~ format
+                ~ " for `format` for from_unixtimestamp is not supported."
+            )
+        }}
+    {% endif -%}
+    fromUnixTimestamp({{ epochs }})
+{%- endmacro %}
+-- fmt: on

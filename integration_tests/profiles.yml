@@ -22,6 +22,16 @@ integration_tests:
       job_retries: 3
       location: US
 
+    clickhouse:
+      type: clickhouse
+      driver: http
+      host: "{{ env_var('CLICKHOUSE_HOST') }}"
+      port: "{{ env_var('CLICKHOUSE_PORT') | as_number }}"
+      user: "{{ env_var('CLICKHOUSE_USER') }}"
+      schema: "{{ env_var('CLICKHOUSE_SCHEMA') }}"
+      secure: false
+      threads: 5
+
     databricks:
       type: databricks
       catalog: "{{ env_var('DATABRICKS_CATALOG', 'hive_metastore') }}"
