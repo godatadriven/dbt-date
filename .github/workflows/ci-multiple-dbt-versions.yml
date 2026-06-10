@@ -87,28 +87,39 @@ jobs:
           COMPOSE_FILE: ./integration_tests/docker-compose.yml
         run: |
           docker compose -f "$COMPOSE_FILE" up -d "dbt-$ADAPTER"
-          # Wait until the service answers a real readiness probe rather than
-          # a fixed sleep — fails fast when a service is broken, returns sooner
-          # when it's healthy, and tells us which service didn't come up.
+          # Each adapter answers a real readiness probe rather than waiting a
+          # fixed amount of time — fails fast when a service is broken,
+          # returns sooner when it's healthy, and tells us which service
+          # didn't come up.
           case "$ADAPTER" in
             clickhouse)
-              probe='curl -sf http://localhost:8123/ping >/dev/null'
+              probe() { curl -sf http://localhost:8123/ping >/dev/null; }
               ;;
             postgres)
-              probe='docker compose -f "$COMPOSE_FILE" exec -T dbt-postgres pg_isready -U dbt -d metastore'
+              probe() { docker compose -f "$COMPOSE_FILE" exec -T dbt-postgres pg_isready -U dbt -d metastore; }
               ;;
             trino)
-              probe='curl -sf http://localhost:8080/v1/info >/dev/null'
+              # /v1/info returns 200 while the coordinator is still in
+              # "starting":true — only proceed once starting flips to false,
+              # otherwise dbt connects and gets SERVER_STARTING_UP.
+              probe() { curl -sf http://localhost:8080/v1/info | grep -q '"starting":false'; }
               ;;
             spark)
-              probe='nc -z localhost 10000'
+              # The thrift port binds before HiveServer2 can actually accept
+              # queries, so a TCP probe returns ready too early. Wait for the
+              # readiness log line instead.
+              probe() { docker compose -f "$COMPOSE_FILE" logs dbt-spark 2>&1 | grep -q "HiveThriftServer2 started"; }
               ;;
           esac
-          timeout 90 bash -c "until $probe; do sleep 2; done" || {
-            echo "::error::dbt-$ADAPTER did not become ready within 90s"
-            docker compose -f "$COMPOSE_FILE" logs "dbt-$ADAPTER"
-            exit 1
-          }
+          deadline=$(( $(date +%s) + 90 ))
+          until probe; do
+            if [ "$(date +%s)" -ge "$deadline" ]; then
+              echo "::error::dbt-$ADAPTER did not become ready within 90s"
+              docker compose -f "$COMPOSE_FILE" logs "dbt-$ADAPTER"
+              exit 1
+            fi
+            sleep 2
+          done
           echo "dbt-$ADAPTER is ready"
 
       - name: Run integration tests (${{ matrix.adapter }})
