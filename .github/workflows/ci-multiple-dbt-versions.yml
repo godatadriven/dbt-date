@@ -7,6 +7,11 @@ on:
   pull_request:
     branches:
       - main
+  # Daily run against main so we catch upstream drift (action versions,
+  # dbt-adapter releases, dependency resolution flips) before the next PR does.
+  # 05:17 UTC is off-peak for shared GitHub runners.
+  schedule:
+    - cron: "17 5 * * *"
   workflow_dispatch:
 
 env:

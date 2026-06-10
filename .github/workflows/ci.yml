@@ -7,6 +7,11 @@ on:
   pull_request:
     branches:
       - main
+  # Daily run against main so we catch upstream drift in the reusable
+  # workflow (e.g. tag retags, runner image bumps, transitive dep flips).
+  # Offset 17 minutes after the no-secret workflow's scheduled run.
+  schedule:
+    - cron: "34 5 * * *"
   workflow_dispatch:
 
 jobs:
