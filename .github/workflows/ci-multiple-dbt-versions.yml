@@ -82,9 +82,34 @@ jobs:
 
       - name: Install testing dependencies (non-python)
         if: ${{ matrix.adapter == 'clickhouse' || matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}
+        env:
+          ADAPTER: ${{ matrix.adapter }}
+          COMPOSE_FILE: ./integration_tests/docker-compose.yml
         run: |
-          docker compose -f ./integration_tests/docker-compose.yml up -d dbt-${{ matrix.adapter }}
-          sleep 30
+          docker compose -f "$COMPOSE_FILE" up -d "dbt-$ADAPTER"
+          # Wait until the service answers a real readiness probe rather than
+          # a fixed sleep — fails fast when a service is broken, returns sooner
+          # when it's healthy, and tells us which service didn't come up.
+          case "$ADAPTER" in
+            clickhouse)
+              probe='curl -sf http://localhost:8123/ping >/dev/null'
+              ;;
+            postgres)
+              probe='docker compose -f "$COMPOSE_FILE" exec -T dbt-postgres pg_isready -U dbt -d metastore'
+              ;;
+            trino)
+              probe='curl -sf http://localhost:8080/v1/info >/dev/null'
+              ;;
+            spark)
+              probe='nc -z localhost 10000'
+              ;;
+          esac
+          timeout 90 bash -c "until $probe; do sleep 2; done" || {
+            echo "::error::dbt-$ADAPTER did not become ready within 90s"
+            docker compose -f "$COMPOSE_FILE" logs "dbt-$ADAPTER"
+            exit 1
+          }
+          echo "dbt-$ADAPTER is ready"
 
       - name: Run integration tests (${{ matrix.adapter }})
         run: |
