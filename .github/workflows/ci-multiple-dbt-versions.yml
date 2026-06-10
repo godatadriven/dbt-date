@@ -69,11 +69,11 @@ jobs:
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }} (including Spark extra)
         if: ${{ matrix.adapter == 'spark' }}
-        run: pip install "dbt-${{ matrix.adapter }}[PyHive]" "dbt-core~=${{ matrix.dbt-version }}" tox
+        run: pip install "dbt-${{ matrix.adapter }}[PyHive]~=${{ matrix.dbt-version }}.0" "dbt-core~=${{ matrix.dbt-version }}.0" tox
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
         if: ${{ matrix.adapter != 'spark' && !(matrix.adapter == 'bigquery' && matrix.dbt-version == '1.6') }}
-        run: pip install "dbt-${{ matrix.adapter }}" "dbt-core~=${{ matrix.dbt-version }}" tox
+        run: pip install "dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}.0" "dbt-core~=${{ matrix.dbt-version }}.0" tox
 
       - name: Install testing dependencies (non-python)
         if: ${{ matrix.adapter == 'clickhouse' || matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}
