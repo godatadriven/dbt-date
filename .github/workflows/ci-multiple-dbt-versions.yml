@@ -60,6 +60,13 @@ jobs:
           - trino
         dbt-version:
           - "1.10"
+        # Only BigQuery, Databricks, and dbt-core have a 1.11 stable on PyPI
+        # as of this PR. Add other adapters to this include list as they ship.
+        include:
+          - adapter: bigquery
+            dbt-version: "1.11"
+          - adapter: databricks
+            dbt-version: "1.11"
 
     steps:
       - uses: actions/checkout@v4
