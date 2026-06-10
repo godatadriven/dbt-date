@@ -86,7 +86,7 @@ Three workflows in `.github/workflows/`:
 
 - `ci-multiple-dbt-versions.yml` — runs the no-secret adapters (`clickhouse, duckdb, postgres, spark, trino`) on every PR and push. Works the same for fork PRs and same-repo branches because nothing here needs GitHub secrets.
 - `ci-secret-adapters.yml` — runs the secret-bearing adapters (`bigquery, databricks`) plus the Fusion engine job. Triggered by a maintainer (`write+` permission) commenting `/ok-to-test` on a PR, plus `push: main`, a daily schedule, and manual dispatch. Runs in base-repo context so secrets are available; checks out the PR's head SHA (after validating it as a 40-char hex string) and posts commit statuses back to it. Each new push needs a fresh `/ok-to-test` comment.
-- `ci.yml` — delegates to `dbt-labs/dbt-package-testing` reusable workflow. Runs on `push: main` only (the reusable workflow can't be steered at a non-base ref, so running it on PRs would silently re-test main).
+- `ci.yml` — delegates to `dbt-labs/dbt-package-testing` reusable workflow for BigQuery, Databricks, Postgres, Trino. Runs on every PR and push to main.
 
 After pushing, monitor with `gh run list --branch <branch> --limit 5`. If a PR has merge conflicts CI won't trigger — rebase onto `main` first.
 
