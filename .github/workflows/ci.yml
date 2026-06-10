@@ -1,10 +1,13 @@
 name: Package Integration Tests
 
+# This calls the dbt-labs/dbt-package-testing reusable workflow, which does
+# not accept a checkout ref input — so it always tests the base branch.
+# Running it on pull_request would silently re-test main against the PR
+# author's credentials with no benefit, so we only run it on push to main
+# (post-merge coverage) and on manual dispatch.
+
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
   workflow_dispatch:

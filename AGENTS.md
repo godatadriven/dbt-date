@@ -82,10 +82,11 @@ Do **not** use `{{ modules.datetime... }}` for this — the dbt-fusion Jinja eng
 
 ## CI
 
-Two workflows in `.github/workflows/`:
+Three workflows in `.github/workflows/`:
 
-- `ci.yml` — delegates to `dbt-labs/dbt-package-testing` reusable workflow for BigQuery, Databricks, Postgres, Trino.
-- `ci-multiple-dbt-versions.yml` — matrix over `{bigquery, databricks, duckdb, postgres, spark, trino} x {1.10}` plus a Fusion engine job for BigQuery and Databricks.
+- `ci-multiple-dbt-versions.yml` — runs the no-secret adapters (`clickhouse, duckdb, postgres, spark, trino`) on every PR and push. Works the same for fork PRs and same-repo branches because nothing here needs GitHub secrets.
+- `ci-multiple-dbt-versions-with-secrets.yml` — runs the secret-bearing adapters (`bigquery, databricks`) plus the Fusion engine job. Triggered via `workflow_run` after the no-secret workflow succeeds, plus on push to main. Runs in base-repo context so secrets are available; explicitly checks out the PR's head SHA and posts a commit status back to it.
+- `ci.yml` — delegates to `dbt-labs/dbt-package-testing` reusable workflow. Runs on push to main only (the reusable workflow can't be steered at a non-base ref, so running it on PRs would silently re-test main).
 
 After pushing, monitor with `gh run list --branch <branch> --limit 5`. If a PR has merge conflicts CI won't trigger — rebase onto `main` first.
 
