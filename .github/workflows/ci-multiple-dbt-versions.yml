@@ -78,6 +78,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }} (including Spark extra)
         if: ${{ matrix.adapter == 'spark' }}
@@ -114,6 +116,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
 
       # Having a DuckDB adapter in profiles.yml is unsupported by Fusion (even if unused)
       - name: Update profiles.yml
