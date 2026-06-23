@@ -13,7 +13,7 @@
 {%- endmacro -%}
 
 {%- macro bigquery__convert_timezone(column, target_tz, source_tz=None) -%}
-    timestamp(datetime({{ column }}, '{{ target_tz}}'))
+    timestamp(datetime({{ column }}, '{{ target_tz }}'))
 {%- endmacro -%}
 
 {% macro postgres__convert_timezone(column, target_tz, source_tz) -%}
