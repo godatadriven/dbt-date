@@ -126,3 +126,24 @@ jobs:
         run: |
           export DBT_SUFFIX=_$(date +%6N)
           tox -e dbt_integration_${{ matrix.adapter }}
+
+  integration_tests_fusion:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Install dbt-duckdb
+        run: pip install --pre "dbt-duckdb" "dbt-core~=2.0.0a0" tox
+
+      - name: Run integration tests
+        run: |
+          export DBT_SUFFIX=_$(date +%6N)
+          tox -e dbt_integration_duckdb
