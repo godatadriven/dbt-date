@@ -63,13 +63,6 @@ jobs:
           - trino
         dbt-version:
           - "1.10"
-        include:
-          - adapter: bigquery
-            dbt-version: "1.11"
-          - adapter: databricks
-            dbt-version: "1.11"
-          - adapter: databricks
-            dbt-version: "1.12"
 
     steps:
       - uses: actions/checkout@v4
