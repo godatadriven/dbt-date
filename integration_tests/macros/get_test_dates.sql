@@ -33,7 +33,12 @@
         ) as time_stamp_utc,
         cast('2021-06-07' as {{ dbt.type_timestamp() }}) as rounded_timestamp,
         cast('2021-06-08' as {{ dbt.type_timestamp() }}) as rounded_timestamp_utc,
-        -- These columns are here to make sure these macros get run during testing:
+        -- These columns are here to make sure these macros get run during testing.
+        -- as_of_date freezes today() at `dbt run` time so the month-relative
+        -- assertions in test_dates.yml derive their expected values from this stored
+        -- date rather than a fresh today() at `dbt test` time. Without it, a run and
+        -- test that straddle a month boundary (in the configured time zone) disagree.
+        {{ dbt_date.today() }} as as_of_date,
         {{ dbt_date.last_month_number() }} as last_month_number,
         {{ dbt_date.last_month_name(short=False) }} as last_month_name,
         {{ dbt_date.last_month_name(short=True) }} as last_month_name_short,
@@ -81,7 +86,12 @@
         ) as time_stamp_utc,
         cast('2021-06-07' as {{ dbt.type_timestamp() }}) as rounded_timestamp,
         cast('2021-06-08' as {{ dbt.type_timestamp() }}) as rounded_timestamp_utc,
-        -- These columns are here to make sure these macros get run during testing:
+        -- These columns are here to make sure these macros get run during testing.
+        -- as_of_date freezes today() at `dbt run` time so the month-relative
+        -- assertions in test_dates.yml derive their expected values from this stored
+        -- date rather than a fresh today() at `dbt test` time. Without it, a run and
+        -- test that straddle a month boundary (in the configured time zone) disagree.
+        {{ dbt_date.today() }} as as_of_date,
         {{ dbt_date.last_month_number() }} as last_month_number,
         {{ dbt_date.last_month_name(short=False) }} as last_month_name,
         {{ dbt_date.last_month_name(short=True) }} as last_month_name_short,
