@@ -42,23 +42,23 @@ Python deps are managed with `uv` (see `pyproject.toml`). Pre-commit uses `sqlfm
 
 ```bash
 # One-time setup
-make setup          # runs uv sync + starts docker compose (postgres, spark, trino)
+mise run setup      # runs uv sync + starts docker compose (postgres, spark, trino)
 
 # Run a single adapter (duckdb is fastest, no docker needed)
-tox -e dbt_integration_duckdb
+mise run test:duckdb
 
 # Run everything in parallel
-tox -p all
+mise run test:all
 
 # Fusion engine targets
-tox -e fusion_integration_bigquery
-tox -e fusion_integration_databricks
+mise run test:fusion-bigquery
+mise run test:fusion-databricks
 
 # Pre-commit (use prek if installed, else pre-commit)
 prek run --all-files     # or: pre-commit run --all-files
 ```
 
-DuckDB is the recommended adapter for iterative local work — it needs no credentials and no docker. BigQuery, Databricks, Snowflake need credentials (see `.env_example`). Postgres, Spark, Trino need `make setup` to start their docker containers.
+DuckDB is the recommended adapter for iterative local work — it needs no credentials and no docker. BigQuery, Databricks, Snowflake need credentials (see `.env_example`). Postgres, Spark, Trino need `mise run setup` to start their docker containers.
 
 ### `DBT_SUFFIX`
 
@@ -101,7 +101,7 @@ After pushing, monitor with `gh run list --branch <branch> --limit 5`. If a PR h
 | `integration_tests/models/`                                  | dbt models that consume the macros for testing                               |
 | `integration_tests/macros/`                                  | Test-only macros (`get_test_dates.sql`, etc.)                                |
 | `integration_tests/profiles.yml`                             | Adapter profiles read from env vars                                          |
-| `tox.ini`                                                    | Per-adapter test environments                                                |
+| `mise.toml`                                                   | Tool version management and per-adapter test tasks           |
 | `supported_adapters.env`                                     | The four adapters tested locally by default                                  |
 | `.pre-commit-config.yaml`                                    | sqlfmt + prettier + standard hooks                                           |
 
@@ -109,4 +109,4 @@ After pushing, monitor with `gh run list --branch <branch> --limit 5`. If a PR h
 
 - Adapter-specific date-function quirks: look at how an existing macro handles the same adapter (e.g. Postgres uses `isodow`/`dow`, BigQuery's `dayofweek` is 1-indexed Sunday-first, Snowflake has `dayofweekiso`).
 - Fusion-specific failures: the Fusion Jinja engine is stricter than dbt-core's. If something works on core but not Fusion, suspect Jinja features not exposed (e.g. `modules`).
-- Test failures only on one adapter: re-run just that target locally with `tox -e dbt_integration_<adapter>` and inspect the rendered SQL in `integration_tests/target/`.
+- Test failures only on one adapter: re-run just that target locally with `mise run test:<adapter>` and inspect the rendered SQL in `integration_tests/target/`.

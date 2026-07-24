@@ -21,8 +21,6 @@ on:
   workflow_dispatch:
 
 env:
-  DBT_PROJECT_DIR: integration_tests
-  DBT_PROFILES_DIR: integration_tests
   CLICKHOUSE_HOST: localhost
   CLICKHOUSE_PORT: "8123"
   CLICKHOUSE_SCHEMA: dbt_date
@@ -67,23 +65,28 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version-file: .python-version
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Set up Mise
+        uses: jdx/mise-action@v4.2.1
+        with:
+          version: 2026.7.12
+
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }} (including Spark extra)
         if: ${{ matrix.adapter == 'spark' }}
-        run: uv pip install --system --prerelease allow "dbt-${{ matrix.adapter }}[PyHive]~=${{ matrix.dbt-version }}.0a0" "dbt-core~=${{ matrix.dbt-version }}.0a0" tox tox-uv
+        run: uv pip install --system --prerelease allow "dbt-${{ matrix.adapter }}[PyHive]~=${{ matrix.dbt-version }}.0a0" "dbt-core~=${{ matrix.dbt-version }}.0a0"
 
       - name: Install dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}
         if: ${{ matrix.adapter != 'spark' }}
-        run: uv pip install --system --prerelease allow "dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}.0a0" "dbt-core~=${{ matrix.dbt-version }}.0a0" tox tox-uv
+        run: uv pip install --system --prerelease allow "dbt-${{ matrix.adapter }}~=${{ matrix.dbt-version }}.0a0" "dbt-core~=${{ matrix.dbt-version }}.0a0"
 
       - name: Install testing dependencies (non-python)
         if: ${{ matrix.adapter == 'clickhouse' || matrix.adapter == 'postgres' || matrix.adapter == 'spark' || matrix.adapter == 'trino' }}
@@ -130,7 +133,7 @@ jobs:
       - name: Run integration tests (${{ matrix.adapter }})
         run: |
           export DBT_SUFFIX=_$(date +%6N)
-          tox -e dbt_integration_${{ matrix.adapter }}
+          mise run test:${{ matrix.adapter }}
 
   integration_tests_fusion:
     runs-on: ubuntu-latest
@@ -140,20 +143,25 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version-file: .python-version
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Set up Mise
+        uses: jdx/mise-action@v4.2.1
+        with:
+          version: 2026.7.12
+
       - name: Install dbt-duckdb
-        run: uv pip install --system --prerelease allow "dbt-duckdb" "dbt-core~=2.0.0a0" tox tox-uv
+        run: uv pip install --system --prerelease allow "dbt-duckdb" "dbt-core~=2.0.0a0"
 
       - name: Run integration tests
         run: |
           export DBT_SUFFIX=_$(date +%6N)
-          tox -e dbt_integration_duckdb
+          mise run test:duckdb
