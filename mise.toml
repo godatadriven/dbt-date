@@ -1,0 +1,27 @@
+# Task definitions consumed by dbt-package-testing's run_tox.yml when called
+# with test_runner: "mise". Task names follow the convention that workflow
+# expects: test:<adapter> (and test:fusion-<adapter> for the Fusion workflow).
+#
+# No [tools] section on purpose: the reusable workflow installs dbt into uv's
+# system Python (uv pip install --system). Pinning a Python here would make
+# `mise run` execute under a different interpreter that has no dbt installed.
+
+[tasks."test:duckdb"]
+description = "Run integration tests for DuckDB"
+dir = "integration_tests"
+run = [
+    "dbt debug --target duckdb",
+    "dbt deps",
+    "dbt run --target duckdb",
+    "dbt test --target duckdb",
+]
+
+[tasks."test:postgres"]
+description = "Run integration tests for Postgres"
+dir = "integration_tests"
+run = [
+    "dbt debug --target postgres",
+    "dbt deps",
+    "dbt run --target postgres",
+    "dbt test --target postgres",
+]

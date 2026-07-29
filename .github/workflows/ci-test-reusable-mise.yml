@@ -1,0 +1,29 @@
+# TEST-ONLY workflow. Exercises dbt-labs/dbt-package-testing PR #31's
+# run_tox.yml against dbt-date as a `test_runner: mise` consumer, end to end,
+# with no secrets. Delete once the workflows have been validated.
+#
+# Pinned to the PR branch (@chore/migrate-uv-mise) so it tracks that PR.
+# Only duckdb (no service) and postgres (service container provided by the
+# reusable workflow) are exercised — both are covered without any secrets.
+
+name: TEST reusable run_tox via mise
+
+on:
+  pull_request:
+  push:
+    branches:
+      - test/reusable-mise-run-tox
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core-tests:
+    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@chore/migrate-uv-mise
+    with:
+      adapters: "duckdb,postgres"
+      test_runner: "mise"
+      # postgres inputs intentionally omitted: the reusable workflow's postgres
+      # service container and its input defaults are self-consistent, and
+      # dbt-date's postgres profile reads the same env vars the workflow sets.
