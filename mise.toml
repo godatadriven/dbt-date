@@ -25,3 +25,25 @@ run = [
     "dbt run --target postgres",
     "dbt test --target postgres",
 ]
+
+[tasks."test:fusion-bigquery"]
+description = "Run Fusion integration tests for BigQuery"
+dir = "integration_tests"
+run = [
+    # Fusion's service-account method reads a keyfile on disk (./service-key-file.json),
+    # not the BIGQUERY_KEYFILE_JSON env var. run_tox_fusion.yml passes the secret only as
+    # an env var and offers no pre-step hook, so the consumer must materialise the file here.
+    "printf '%s' \"$BIGQUERY_KEYFILE_JSON\" > service-key-file.json",
+    "dbt debug --target bigquery-fusion",
+    "dbt deps",
+    "dbt build --target bigquery-fusion --full-refresh",
+]
+
+[tasks."test:fusion-databricks"]
+description = "Run Fusion integration tests for Databricks"
+dir = "integration_tests"
+run = [
+    "dbt debug --target databricks",
+    "dbt deps",
+    "dbt build --target databricks --full-refresh",
+]

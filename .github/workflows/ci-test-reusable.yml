@@ -1,0 +1,66 @@
+# TEST-ONLY workflow. Exercises dbt-labs/dbt-package-testing PR #31's reusable
+# workflows against dbt-date across the full matrix:
+#   {core (run_tox.yml), fusion (run_tox_fusion.yml)} x {mise, tox}
+# so we can confirm both test_runner paths work and surface required changes.
+# Delete once the workflows have been validated.
+#
+# Pinned to the PR branch (@chore/migrate-uv-mise) so it tracks that PR.
+# - core   -> duckdb + postgres (no secrets; postgres uses the workflow's own service container)
+# - fusion -> bigquery + databricks (real cloud credentials; small BigQuery/Databricks cost per run)
+
+name: TEST reusable workflows (core+fusion, mise+tox)
+
+on:
+  pull_request:
+  push:
+    branches:
+      - test/reusable-mise-run-tox
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # --- dbt Core, mise runner ---
+  core-mise:
+    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@chore/migrate-uv-mise
+    with:
+      adapters: "duckdb,postgres"
+      test_runner: "mise"
+
+  # --- dbt Core, tox runner ---
+  core-tox:
+    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@chore/migrate-uv-mise
+    with:
+      adapters: "duckdb,postgres"
+      test_runner: "tox"
+
+  # --- dbt Fusion, mise runner ---
+  fusion-mise:
+    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox_fusion.yml@chore/migrate-uv-mise
+    with:
+      adapters: "bigquery,databricks"
+      test_runner: "mise"
+      BIGQUERY_PROJECT: dbt-date
+      BIGQUERY_SCHEMA: "fusion_mise_bigquery_${{ github.run_number }}"
+      DATABRICKS_HOST: "${{ vars.DATABRICKS_HOST }}"
+      DATABRICKS_HTTP_PATH: "${{ vars.DATABRICKS_HTTP_PATH }}"
+      DATABRICKS_SCHEMA: "fusion_mise_databricks_${{ github.run_number }}"
+    secrets:
+      BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
+      DBT_ENV_SECRET_DATABRICKS_TOKEN: ${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}
+
+  # --- dbt Fusion, tox runner ---
+  fusion-tox:
+    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox_fusion.yml@chore/migrate-uv-mise
+    with:
+      adapters: "bigquery,databricks"
+      test_runner: "tox"
+      BIGQUERY_PROJECT: dbt-date
+      BIGQUERY_SCHEMA: "fusion_tox_bigquery_${{ github.run_number }}"
+      DATABRICKS_HOST: "${{ vars.DATABRICKS_HOST }}"
+      DATABRICKS_HTTP_PATH: "${{ vars.DATABRICKS_HTTP_PATH }}"
+      DATABRICKS_SCHEMA: "fusion_tox_databricks_${{ github.run_number }}"
+    secrets:
+      BIGQUERY_KEYFILE_JSON: ${{ secrets.BIGQUERY_KEYFILE_JSON }}
+      DBT_ENV_SECRET_DATABRICKS_TOKEN: ${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}
