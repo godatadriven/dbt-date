@@ -23,7 +23,7 @@ jobs:
     if: >-
       github.event_name != 'pull_request' ||
       github.event.pull_request.head.repo.full_name == github.repository
-    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@v1
+    uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@v2
     permissions:
       contents: read
     secrets:
@@ -31,6 +31,8 @@ jobs:
       DBT_ENV_SECRET_DATABRICKS_TOKEN: "${{ secrets.DBT_ENV_SECRET_DATABRICKS_TOKEN }}"
       DBT_ENV_SECRET_TRINO_PASS: dbt
     with:
+      # Run the per-adapter mise tasks (mise run test:<adapter>) instead of tox.
+      test_runner: mise
       BIGQUERY_PROJECT: dbt-date
       BIGQUERY_SCHEMA: "integration_tests_bigquery_${{ github.run_number }}"
       DATABRICKS_HOST: "${{ vars.DATABRICKS_HOST }}"

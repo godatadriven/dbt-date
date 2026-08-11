@@ -1,4 +1,3 @@
-.tox/
 .venv/
 dbt_date.egg-info/
 dbt_internal_packages/

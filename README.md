@@ -870,11 +870,12 @@ This project contains integration tests for all macros in a separate `integratio
 1. Set up your development environment:
 
    ```shell
-   # Install uv if you haven't already
+   # Install mise (task runner) and uv (dependency manager) if you haven't already
+   curl https://mise.run | sh
    curl -LsSf https://astral.sh/uv/install.sh | sh
-   
-   # Sync dependencies and set up the environment
-   make setup
+
+   # Sync dependencies and start the test containers
+   mise run setup
    ```
 
 2. Copy `.env_example` to `.env` and fill in the necessary values. Set the environment variables:
@@ -888,19 +889,13 @@ This project contains integration tests for all macros in a separate `integratio
    - To run all tests in parallel:
 
      ```shell
-     tox -p all
-     ```
-
-   - To run all tests in series:
-
-     ```shell
-     tox
+     mise run test:all
      ```
 
    - To run tests for a specific adapter:
 
      ```shell
-     tox -e dbt_integration_<ADAPTER>
+     mise run test:<adapter>
      ```
 
 4. To debug on a specific adapters:
