@@ -16,6 +16,13 @@ on:
 
 jobs:
   run-tests:
+    # This workflow needs warehouse secrets, which GitHub withholds from
+    # fork PRs — so it can only pass on same-repo refs. Skip it on fork PRs
+    # (they get no-secret coverage from ci-multiple-dbt-versions.yml and
+    # secret-adapter coverage via `/ok-to-test` in ci-secret-adapters.yml).
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     uses: dbt-labs/dbt-package-testing/.github/workflows/run_tox.yml@v1
     permissions:
       contents: read
