@@ -61,6 +61,15 @@ jobs:
           - trino
         dbt-version:
           - "1.10"
+          - "1.11"
+        # clickhouse and trino have no dbt-core 1.11 compatible release yet,
+        # so exclude those combinations. No 1.12 release exists for any of
+        # these adapters. Revisit when upstream publishes them.
+        exclude:
+          - adapter: clickhouse
+            dbt-version: "1.11"
+          - adapter: trino
+            dbt-version: "1.11"
 
     steps:
       - uses: actions/checkout@v5
