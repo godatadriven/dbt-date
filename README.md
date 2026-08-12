@@ -175,7 +175,7 @@ Note: the first parameter expects a dbt `ref` variable, i.e. a reference to a mo
 
 ### [convert_timezone](macros/calendar_date/convert_timezone.sql)( `column, target_tz=None, source_tz=None`)
 
-Cross-database implemention of convert_timezone function.
+Cross-database implementation of convert_timezone function.
 
 Usage:
 
@@ -278,7 +278,7 @@ returns: **33**
 
 ### [from_unixtimestamp](macros/calendar_date/from_unixtimestamp.sql)(`epochs, format="seconds"`)
 
-Converts an `epoch` into a timestamp. The default for `format` is `seconds`, which can overriden depending your data"s epoch format.
+Converts an `epoch` into a timestamp. The default for `format` is `seconds`, which can be overridden depending your data's epoch format.
 
 Usage:
 
@@ -326,7 +326,13 @@ or, optionally, you can override the default timezone:
 
 ### [iso_year_week](macros/calendar_date/iso_year_week.sql)(`date`)
 
-Computes the year-week combination in ISO-format, e.g. `2026-W01`. Combining year and week seperately will return incorrect results at the edges of the year as start and end dates of the week might fall in a different year. This macro calculates the correct year for the ISO week, e.g. December 31st can fall in week 01 of the next year.
+Computes the year-week combination in ISO-format, e.g. `2026-W01`. Combining year and week separately will return incorrect results at the edges of the year as start and end dates of the week might fall in a different year. This macro calculates the correct year for the ISO week, e.g. December 31st can fall in week 01 of the next year.
+
+Usage:
+
+```sql
+{{ dbt_date.iso_year_week("date_col") }} as iso_year_week
+```
 
 ### [iso_week_start](macros/calendar_date/iso_week_start.sql)(`date=None, tz=None`)
 
@@ -407,13 +413,13 @@ Wraps:
 Usage:
 
 ```sql
-{{ dbt_date.last_week()) }} as last_week_start_date
+{{ dbt_date.last_week() }} as last_week_start_date
 ```
 
 or, optionally, you can override the default timezone:
 
 ```sql
-{{ dbt_date.last_week(tz="America/New_York)) }} as last_week_start_date
+{{ dbt_date.last_week(tz="America/New_York") }} as last_week_start_date
 ```
 
 ### [month_name](macros/calendar_date/month_name.sql)(`date, short=True, tz=None, language="default"`)
@@ -421,15 +427,15 @@ or, optionally, you can override the default timezone:
 Extracts the name of the month from a date. For `language=default` this will return the name depending on the language set in the database. To get month names in a specific language use the two-letter language abbreviation of a supported language (en, nl, de, fr, es, it, pt, pl, da, sv, tr, cs, fi) or overwrite the `get_localized_datepart_names` macro with your own language of choice.
 
 ```sql
-{{ dbt_date.month_name(date_col) }} as month_short_name
+{{ dbt_date.month_name("date_col") }} as month_short_name
 ```
 
 ```sql
-{{ dbt_date.month_name(date_col, short=true) }} as month_short_name
+{{ dbt_date.month_name("date_col", short=true) }} as month_short_name
 ```
 
 ```sql
-{{ dbt_date.month_name(date_col, short=false, language="nl") }} as month_long_name_localized
+{{ dbt_date.month_name("date_col", short=false, language="nl") }} as month_long_name_localized
 ```
 
 ### [n_days_ago](macros/calendar_date/n_days_ago.sql)(`n, date=None, tz=None`)
@@ -451,7 +457,7 @@ Alternatively, you can specify a date column instead of defaulting the local dat
 or, optionally, you can override the default timezone:
 
 ```sql
-{{ dbt_date.n_days_ago(7, tz="America/New_York)) }}
+{{ dbt_date.n_days_ago(7, tz="America/New_York") }}
 ```
 
 ### [n_days_away](macros/calendar_date/n_days_away.sql)(`n, date=None, tz=None`)
@@ -473,7 +479,7 @@ Alternatively, you can specify a date column instead of defaulting the local dat
 or, optionally, you can override the default timezone:
 
 ```sql
-{{ dbt_date.n_days_away(7, tz="America/New_York)) }}
+{{ dbt_date.n_days_away(7, tz="America/New_York") }}
 ```
 
 ### [n_months_ago](macros/calendar_date/n_months_ago.sql)(`n, tz=None`)
@@ -489,7 +495,7 @@ Usage:
 or, optionally, you can override the default timezone:
 
 ```sql
-{{ dbt_date.n_months_ago(12, tz="America/New_York)) }}
+{{ dbt_date.n_months_ago(12, tz="America/New_York") }}
 ```
 
 ### [n_months_away](macros/calendar_date/n_months_away.sql)(`n, tz=None`)
@@ -499,13 +505,13 @@ Gets timestamp _n_ months away, based on local date.
 Usage:
 
 ```sql
-{{ dbt_date.n_months_ago(12) }}
+{{ dbt_date.n_months_away(12) }}
 ```
 
 or, optionally, you can override the default timezone:
 
 ```sql
-{{ dbt_date.n_months_away(12, tz="America/New_York)) }}
+{{ dbt_date.n_months_away(12, tz="America/New_York") }}
 ```
 
 ### [n_weeks_ago](macros/calendar_date/n_weeks_ago.sql)(`n, tz=None`)
@@ -521,7 +527,7 @@ Usage:
 or, optionally, you can override the default timezone:
 
 ```sql
-{{ dbt_date.n_weeks_ago(12, tz="America/New_York)) }}
+{{ dbt_date.n_weeks_ago(12, tz="America/New_York") }}
 ```
 
 ### [n_weeks_away](macros/calendar_date/n_weeks_away.sql)(`n, tz=None`)
@@ -537,7 +543,7 @@ Usage:
 or, optionally, you can override the default timezone:
 
 ```sql
-{{ dbt_date.n_weeks_away(12, tz="America/New_York)) }}
+{{ dbt_date.n_weeks_away(12, tz="America/New_York") }}
 ```
 
 ### [next_month_name](macros/calendar_date/next_month_name.sql)(`short=True, tz=None`)
@@ -603,7 +609,7 @@ Wraps:
 Usage:
 
 ```sql
-{{ dbt_date.next_week()) }} as next_week_start_date
+{{ dbt_date.next_week() }} as next_week_start_date
 ```
 
 or, optionally, you can override the default timezone:
