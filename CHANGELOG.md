@@ -1,3 +1,9 @@
+# Unreleased
+
+## New Features
+
+- Add compile-time `is_before`, `is_after`, `is_before_or_equal`, `is_after_or_equal`, and `is_between` macros that return Jinja booleans (for `config(enabled=...)` and other parse-time logic)
+
 # dbt-date v0.10.1
 
 ## Fixes

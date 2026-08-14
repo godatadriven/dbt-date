@@ -126,6 +126,11 @@ For example, use `America/New_York` for East Coast Time.
 
 - [date](#dateyear-month-day)
 - [datetime](#datetimeyear-month-day-hour0-minute0-second0-microsecond0-tznone)
+- [is_after](#is_aftervalue-referencenone-tznone)
+- [is_after_or_equal](#is_after_or_equalvalue-referencenone-tznone)
+- [is_before](#is_beforevalue-referencenone-tznone)
+- [is_before_or_equal](#is_before_or_equalvalue-referencenone-tznone)
+- [is_between](#is_betweenstart-end-referencenone-tznone-inclusiveleft)
 
 ## Documentation
 
@@ -868,6 +873,80 @@ or, optionally, you can override the default timezone:
 > ClickHouse versions before 26.5 can't parse the offset with the default parser. Either
 > use ClickHouse >= 26.5, set `cast_string_to_date_time_mode: best_effort` in your
 > profile's `custom_settings`, or pass a value without a timezone.
+
+### [is_before](macros/_utils/datetime_compare.sql)(`value`, `reference=None`, `tz=None`)
+
+Returns a Jinja/Python boolean: `true` when `reference` is strictly before `value`. This is **not** a SQL expression, so it can be used in `{% if %}` blocks and in `config(enabled=...)`.
+
+If `reference` is omitted, the macro uses `run_started_at` so every resource in the same dbt invocation sees the same clock.
+
+`value` and `reference` accept ISO-8601 dates (`2026-09-01`), timestamps (`2026-09-01T15:30:00Z`), naive timestamps (`2026-09-01 15:30:00`), and Python `date`/`datetime` objects from `dbt_date.date()` / `dbt_date.datetime()`.
+
+Date-only values and naive timestamps are interpreted as midnight / local time in `tz` (default `UTC`). This is independent of `dbt_date:time_zone`. Timestamps that already include an offset keep that instant; `tz` is not reapplied.
+
+```sql
+{{
+    config(
+        enabled=dbt_date.is_before("2026-09-01", tz="UTC")
+    )
+}}
+
+select ...
+```
+
+At `2026-08-31T23:59:59Z` this is enabled; at `2026-09-01T00:00:00Z` it is disabled.
+
+```sql
+{% set enabled = dbt_date.is_before("2026-09-01") %}
+{% if enabled %}
+    ...
+{% endif %}
+```
+
+### [is_before_or_equal](macros/_utils/datetime_compare.sql)(`value`, `reference=None`, `tz=None`)
+
+Same as `is_before`, but `true` when `reference` is before or exactly equal to `value`.
+
+### [is_after](macros/_utils/datetime_compare.sql)(`value`, `reference=None`, `tz=None`)
+
+Returns `true` when `reference` is strictly after `value`.
+
+### [is_after_or_equal](macros/_utils/datetime_compare.sql)(`value`, `reference=None`, `tz=None`)
+
+Same as `is_after`, but `true` when `reference` is after or exactly equal to `value`.
+
+```sql
+{{
+    config(
+        enabled=dbt_date.is_after_or_equal("2026-08-01")
+    )
+}}
+```
+
+### [is_between](macros/_utils/datetime_compare.sql)(`start`, `end`, `reference=None`, `tz=None`, `inclusive="left"`)
+
+Returns `true` when `reference` falls in the window from `start` to `end`. The default is a half-open interval `[start, end)`, which is convenient for model expiration dates.
+
+`inclusive` must be one of:
+
+- `"left"` (default): `start <= reference < end`
+- `"right"`: `start < reference <= end`
+- `"both"`: `start <= reference <= end`
+- `"neither"`: `start < reference < end`
+
+```sql
+{{
+    config(
+        enabled=dbt_date.is_between(
+            "2026-08-01",
+            "2026-09-01",
+            tz="UTC"
+        )
+    )
+}}
+```
+
+Pass `tz` to interpret date-only bounds in a specific timezone, for example `tz="Asia/Tokyo"`.
 
 ## Contributing
 
