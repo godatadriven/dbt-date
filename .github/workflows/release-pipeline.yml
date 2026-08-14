@@ -15,10 +15,6 @@ on:
           - premajor
           - preminor
           - prepatch
-          - prerelease
-
-env:
-  POETRY_VERSION: "2.0.1"
 
 jobs:
   release:
@@ -31,30 +27,51 @@ jobs:
       - name: Fetch tags
         run: git fetch --prune --unshallow --tags
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
         with:
-          installer-parallel: true
-          version: ${{ env.POETRY_VERSION }}
+          enable-cache: true
 
       - name: Bump version
-        run: |
-          poetry init
-          poetry version $(git tag --sort version:refname | tail -n 1)
-          poetry version ${{ inputs.version_bump_type }}
-
-      - name: Save version to env var
         id: version
+        env:
+          BUMP_TYPE: ${{ inputs.version_bump_type }}
         run: |
-          export version=$(poetry version --short)
-          echo "version=$version" >> $GITHUB_OUTPUT
+          # Map the npm-style choice to uv `--bump` flags. The pre* choices add
+          # an `alpha` component because uv rejects a bare pre-release bump from
+          # a stable version (it must also raise a release component).
+          case "$BUMP_TYPE" in
+            major)    bump=(--bump major) ;;
+            minor)    bump=(--bump minor) ;;
+            patch)    bump=(--bump patch) ;;
+            premajor) bump=(--bump major --bump alpha) ;;
+            preminor) bump=(--bump minor --bump alpha) ;;
+            prepatch) bump=(--bump patch --bump alpha) ;;
+            *) echo "::error::Unknown version_bump_type: $BUMP_TYPE"; exit 1 ;;
+          esac
+
+          # Seed from the highest release tag, then bump. Restrict to numeric
+          # tags so the legacy `v`-prefixed tag can't sort to the top.
+          latest_tag="$(git tag --sort=version:refname | grep -E '^[0-9]' | tail -n 1)"
+
+          # `--frozen` keeps uv from touching the lockfile or building the env.
+          # pyproject.toml is edited in place but never committed; the git tag is
+          # the source of truth. Capture the bumped value from the command's own
+          # output: uv version read forms mis-report without a synced venv.
+          uv version --frozen "$latest_tag" >/dev/null
+          version="$(uv version --frozen "${bump[@]}" | awk '{print $NF}')"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "version: $version"
 
       - name: Determine if prerelease flag is necessary
+        id: prerelease
+        env:
+          BUMP_TYPE: ${{ inputs.version_bump_type }}
         run: |
-          [ "${{ inputs.version_bump_type }}" = "premajor" ] || [ "${{ inputs.version_bump_type }}" = "preminor" ] || [ "${{ inputs.version_bump_type }}" = "prepatch" ] || [ "${{ inputs.version_bump_type }}" = "prerelease" ] && export PRERELEASE="--prerelease" || export PRERELEASE="--latest"
-          echo "PRERELEASE: $PRERELEASE"
-          echo PRERELEASE=$PRERELEASE >> "$GITHUB_ENV"
+          case "$BUMP_TYPE" in
+            pre*) echo "flag=--prerelease" >> "$GITHUB_OUTPUT" ;;
+            *)    echo "flag=--latest" >> "$GITHUB_OUTPUT" ;;
+          esac
 
       - name: Tag commit and push
         run: |
@@ -79,5 +96,5 @@ jobs:
               --notes-start-tag $LAST_RELEASE \
               --target main \
               --title '${{ steps.version.outputs.version }}' \
-              $PRERELEASE \
+              ${{ steps.prerelease.outputs.flag }} \
               --verify-tag
