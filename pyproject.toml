@@ -1,6 +1,6 @@
 [project]
 name = "dbt-date"
-version = "0.17.0"
+version = "0.20.0"
 description = "Date and calendar-related macros for dbt"
 readme = "README.md"
 requires-python = ">=3.11"
