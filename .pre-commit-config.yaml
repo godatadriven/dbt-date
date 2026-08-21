@@ -21,6 +21,12 @@ repos:
         types_or: [json, markdown, yaml]
   - repo: local
     hooks:
+      - id: check-versions
+        entry: python3 scripts/check_versions.py
+        language: system
+        name: check pyproject.toml / dbt_project.yml versions agree
+        pass_filenames: false
+        files: ^(pyproject\.toml|dbt_project\.yml)$
       - id: sqlfmt
         entry: uv run sqlfmt
         language: system

@@ -46,6 +46,25 @@ env:
   TRINO_USER: dbt
 
 jobs:
+  # The package version lives in two files (pyproject.toml drives the release
+  # pipeline, dbt_project.yml is what dbt reads). Cheap guard so they can't
+  # drift — no adapters, no docker, no secrets.
+  version_check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: .python-version
+
+      - name: Check pyproject.toml and dbt_project.yml versions agree
+        run: python3 scripts/check_versions.py
+
   integration_tests:
     runs-on: ubuntu-latest
     permissions:

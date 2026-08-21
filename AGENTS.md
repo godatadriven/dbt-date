@@ -79,6 +79,7 @@ Do **not** use `{{ modules.datetime... }}` for this — the dbt-fusion Jinja eng
 - **Rebasing**: rebase PR branches onto `main`; never merge `main` in.
 - **GitHub Actions `if:` conditions**: always quote the comparison or put the operator inside the expression — `${{ matrix.adapter == 'bigquery' }}`, not `${{ matrix.adapter }} == 'bigquery'` (the latter substitutes to a bare identifier and silently misbehaves).
 - **Never commit** `integration_tests/service-key-file.json` — CI writes it from a base64 secret for the Fusion BigQuery job.
+- **Package version**: lives in both `pyproject.toml` (`project.version`) and `dbt_project.yml` (`version:`). `pyproject.toml` is the source of truth; never hand-edit `dbt_project.yml`'s version — run `python3 scripts/check_versions.py --fix`. A pre-commit hook and the `version_check` CI job fail on drift, and the release pipeline bumps both and commits them before tagging.
 
 ## CI
 
@@ -104,6 +105,7 @@ After pushing, monitor with `gh run list --branch <branch> --limit 5`. If a PR h
 | `mise.toml`                                                   | Tool version management and per-adapter test tasks           |
 | `supported_adapters.env`                                     | The four adapters tested locally by default                                  |
 | `.pre-commit-config.yaml`                                    | sqlfmt + prettier + standard hooks                                           |
+| `scripts/check_versions.py`                                  | Guards `pyproject.toml` / `dbt_project.yml` version parity (`--fix` to sync) |
 
 ## When you're stuck
 

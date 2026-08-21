@@ -55,9 +55,11 @@ jobs:
           latest_tag="$(git tag --sort=version:refname | grep -E '^[0-9]' | tail -n 1)"
 
           # `--frozen` keeps uv from touching the lockfile or building the env.
-          # pyproject.toml is edited in place but never committed; the git tag is
-          # the source of truth. Capture the bumped value from the command's own
-          # output: uv version read forms mis-report without a synced venv.
+          # The git tag stays the source of truth for the bump base; the edited
+          # pyproject.toml is committed back to main by the next step so the
+          # in-repo version doesn't lag the release. Capture the bumped value
+          # from the command's own output: uv version read forms mis-report
+          # without a synced venv.
           uv version --frozen "$latest_tag" >/dev/null
           version="$(uv version --frozen "${bump[@]}" | awk '{print $NF}')"
           echo "version=$version" >> "$GITHUB_OUTPUT"
@@ -73,12 +75,32 @@ jobs:
             *)    echo "flag=--latest" >> "$GITHUB_OUTPUT" ;;
           esac
 
-      - name: Tag commit and push
+      - name: Propagate version to dbt_project.yml
+        run: python3 scripts/check_versions.py --fix
+
+      - name: Commit version bump to main
         run: |
           git config --global user.email "bot@github.com"
           git config --global user.name "github-actions[bot]"
 
-          # Tag and push
+          # Nothing to commit when both files already carry the new version
+          # (e.g. re-running a dispatch for a version that was already pushed).
+          if git diff --quiet -- pyproject.toml dbt_project.yml; then
+            echo "version files already up to date; skipping commit"
+            exit 0
+          fi
+
+          git add pyproject.toml dbt_project.yml
+          git commit -m "chore: bump version to ${{ steps.version.outputs.version }}"
+          # Requires main to accept pushes from github-actions[bot]; if branch
+          # protection blocks this, grant the bot a bypass or the release will
+          # stop here rather than tagging a half-applied bump.
+          git push origin HEAD:main
+
+      - name: Tag commit and push
+        run: |
+          # Tag the bump commit so the tag, pyproject.toml and dbt_project.yml
+          # all agree on the released version.
           git tag -f \
             -a ${{ steps.version.outputs.version }} \
             -m "${{ steps.version.outputs.version }}"
