@@ -46,6 +46,25 @@ env:
   TRINO_USER: dbt
 
 jobs:
+  # The package version lives in two files (pyproject.toml drives the release
+  # pipeline, dbt_project.yml is what dbt reads). Cheap guard so they can't
+  # drift — no adapters, no docker, no secrets.
+  version_check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Check pyproject.toml and dbt_project.yml versions agree
+        run: uv run --no-project scripts/check_versions.py
+
   integration_tests:
     runs-on: ubuntu-latest
     permissions:
