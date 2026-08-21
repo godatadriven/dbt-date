@@ -57,13 +57,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
         with:
-          python-version-file: .python-version
+          enable-cache: true
 
       - name: Check pyproject.toml and dbt_project.yml versions agree
-        run: python3 scripts/check_versions.py
+        run: uv run --no-project scripts/check_versions.py
 
   integration_tests:
     runs-on: ubuntu-latest

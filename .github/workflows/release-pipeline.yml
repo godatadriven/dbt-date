@@ -83,7 +83,10 @@ jobs:
           esac
 
       - name: Propagate version to dbt_project.yml
-        run: python3 scripts/check_versions.py --fix
+        # --no-project skips a workspace sync (the script is stdlib-only) while
+        # still resolving the interpreter from .python-version, so tomllib is
+        # guaranteed without a separate setup-python step.
+        run: uv run --no-project scripts/check_versions.py --fix
 
       - name: Commit version bump to main
         run: |
