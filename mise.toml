@@ -1,5 +1,5 @@
 [tools]
-python = "3.11.11"
+python = "3.11.18"
 
 [tasks.setup]
 description = "Install dependencies and start docker compose integration test containers"
